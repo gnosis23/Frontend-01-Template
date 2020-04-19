@@ -2,10 +2,7 @@
  * JavaScript Number Regex
  */
 
-const combine = (...args) => args.join("");
-const atLeastOne = (reg) => `${reg}+`;
-const optional = (reg) => `(${reg})?` ;
-const or = (...args) => `(${args.join("|")})`;
+const { combine, atLeastOne, optional, or } = require('./heler');
 
 const Dot = '\\.';
 
