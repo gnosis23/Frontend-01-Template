@@ -47,10 +47,10 @@
 
 ### 3.1 Bound Function Exotic Objects
 
-一个绑定函数没有普通函数的内部槽，它的 [[Call]] 和 [[Constructor]] 方法有点特殊，比如它会用内部的This来取代调用时候的this。
+简介：Function.prototype.bind 会产生一个 bound function 对象。 一个 bound function 没有普通函数的内部槽，但它有 [[Call]] 和 [[Constructor]] 方法。调用它们会间接调用被包裹的函数。
 
 特殊的内部槽如下：
-- [[BoundTargetFunction]] 被bind的函数
+- [[BoundTargetFunction]] 被包裹的函数
 - [[BoundThis]] bind时候的this参数
 - [[BoundArguments]] bind时候的其他参数
 
@@ -61,14 +61,21 @@
 
 ### 3.3 String Exotic Objects
 
-属性 length 特殊处理
-内部槽 [[StringData]]
+简介：String对象封装了字符串值，暴露出数字下标，length等属性。
+
+内部槽 
+- [[StringData]]
 
 ### 3.4 Arguments Exotic Objects
 
-拥有内部槽 [[ParameterMap]]
+简介：大多数函数内都有一个arguments对象。arguments对象是个特殊的数组，索引指向函数调用时的参数。
+
+除了拥有普通对象的内部槽以外，还拥有内部槽 [[ParameterMap]]（待补充）
+
 
 ### 3.5 Integer-Indexed Exotic Objects
+
+简介：用于 TypedArray 系列，待补充
 
 拥有额外的特殊槽
 
@@ -89,7 +96,9 @@
 
 ## 4 Proxy Object
 
+> 简介：代理对象是部分内部方法被es代码实现的 extoic object。它有一个 [[ProxyHandler]] 可用于自定义一个或多个内部方法。还有个内部属性 [[ProxyTarget]] 可用于存储 target 对象。
+
 拥有内部槽：
 - [[ProxyHandler]]
+- [[ProxyTarget]] 
 
-它的内部方法可以被改写
