@@ -1,105 +1,111 @@
 <script>
   let start = [
-  // constructors
-  Number,
-  Object,
-  String,
-  Symbol,
-  Boolean,
-  Array,
-  Date,
-  Promise,
-  Proxy,
-  RegExp,
-  WeakMap,
-  WeakSet,
-  Set,
-  Map,
-  Function,
-  // namespace
-  JSON,
-  Math,
-  Atomics,
-  Reflect,
-  // functions
-  decodeURI,
-  decodeURIComponent,
-  encodeURI,
-  encodeURIComponent,
-  eval,
-  isFinite,
-  isNaN,
-  parseFloat,
-  parseInt,
-  // typed array
-  ArrayBuffer,
-  DataView,
-  SharedArrayBuffer,
-  Float32Array,
-  Float64Array,
-  Int8Array,
-  Int16Array,
-  Int32Array,
-  Uint8Array,
-  Uint8ClampedArray,
-  Uint16Array,
-  Uint32Array,
-  // errors
-  Error,
-  EvalError,
-  RangeError,
-  ReferenceError,
-  SyntaxError,
-  TypeError,
-  URIError
-];
+    // constructors
+    Number,
+    Object,
+    String,
+    Symbol,
+    Boolean,
+    Array,
+    Date,
+    Promise,
+    Proxy,
+    RegExp,
+    WeakMap,
+    WeakSet,
+    Set,
+    Map,
+    Function,
+    // namespace
+    JSON,
+    Math,
+    Atomics,
+    Reflect,
+    // functions
+    decodeURI,
+    decodeURIComponent,
+    encodeURI,
+    encodeURIComponent,
+    eval,
+    isFinite,
+    isNaN,
+    parseFloat,
+    parseInt,
+    // typed array
+    ArrayBuffer,
+    DataView,
+    SharedArrayBuffer,
+    Float32Array,
+    Float64Array,
+    Int8Array,
+    Int16Array,
+    Int32Array,
+    Uint8Array,
+    Uint8ClampedArray,
+    Uint16Array,
+    Uint32Array,
+    // errors
+    Error,
+    EvalError,
+    RangeError,
+    ReferenceError,
+    SyntaxError,
+    TypeError,
+    URIError
+  ];
 
-let join = (path, sub) => path ? `${path}.${sub}` : sub;
-let name = node => {
-  if (typeof node === 'function') return node.name;
-  if (typeof node === 'object') {
-    if (node === Reflect) return 'Reflect';
-    return node[Symbol.toStringTag]
+  function join(path, sub) {
+    return path ? `${path}.${sub}` : sub;
   }
-  throw new Error(node);
-}
 
-let paths = [];
-let id = 0;
-function traverse(node, path, current, parent_id = 0) {
-  if (typeof node === 'object' || typeof node === 'function') {
-    // if (typeof node === 'object') console.warn(path, node);
-    paths.push({
-      id: ++id,
-      path: path,
-      parent_id: parent_id
-    });
-    const next_parent_id = id;
+  function getName(node) {
+    if (typeof node === 'function') return node.name;
+    if (typeof node === 'object') {
+      if (node === Reflect) return 'Reflect';
+      return node[Symbol.toStringTag]
+    }
+    throw new Error(node);
+  }
 
-    if (current === 'constructor' || current === '__proto__') return;
-
-    for (let propName of Object.getOwnPropertyNames(node)) {
-      try {
-        if (typeof node[propName] === 'function') {
-          traverse(node[propName], join(path, propName), propName, next_parent_id)
-        }
-        if (typeof node[propName] === 'object') {
-          traverse(node[propName], join(path, propName), propName, next_parent_id);
-        }
-      } catch (err) {
-        console.warn(path, propName);
-        console.warn(err);
+  function generatePaths() {
+    let paths = [];
+    let id = 0;
+    function traverse(node, path, current, parent_id = 0) {
+      if (typeof node === 'object' || typeof node === 'function') {
+        // if (typeof node === 'object') console.warn(path, node);
         paths.push({
           id: ++id,
-          path: join(path, propName),
-          parent_id
+          path: path,
+          parent_id: parent_id
         });
+        const next_parent_id = id;
+
+        if (current === 'constructor' || current === '__proto__') return;
+
+        for (let propName of Object.getOwnPropertyNames(node)) {
+          try {
+            if (typeof node[propName] === 'function') {
+              traverse(node[propName], join(path, propName), propName, next_parent_id)
+            }
+            if (typeof node[propName] === 'object') {
+              traverse(node[propName], join(path, propName), propName, next_parent_id);
+            }
+          } catch (err) {
+            console.warn(path, propName);
+            console.warn(err);
+            paths.push({
+              id: ++id,
+              path: join(path, propName),
+              parent_id
+            });
+          }
+        }
       }
     }
-  }
-}
 
-start.forEach(node => traverse(node, name(node), name(node)));
-paths.sort((x, y) => x.parent_id - y.parent_id);
-console.log(paths);
+    start.forEach(node => traverse(node, getName(node), getName(node)));
+    paths.sort((x, y) => x.parent_id - y.parent_id);
+    return paths;
+  }
+  console.log(generatePaths());
 </script>
