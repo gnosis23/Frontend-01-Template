@@ -1,4 +1,8 @@
 <script>
+  /**
+   * javascript global objects
+   */
+
   let start = [
     // constructors
     Number,
@@ -70,41 +74,49 @@
   function generatePaths() {
     let paths = [];
     let id = 0;
-    function traverse(node, path, current, parent_id = 0) {
-      if (typeof node === 'object' || typeof node === 'function') {
-        // if (typeof node === 'object') console.warn(path, node);
-        paths.push({
-          id: ++id,
-          path: path,
-          parent_id: parent_id
-        });
-        const next_parent_id = id;
+    const set = new Set(start);
 
-        if (current === 'constructor' || current === '__proto__') return;
+    /**
+     *
+     * @param node
+     * @param path
+     * @param parent_id
+     */
+    function traverse(node, path, parent_id = 0) {
+      // if (typeof node === 'object') console.warn(path, node);
+      paths.push({
+        id: ++id,
+        path: path,
+        parent_id: parent_id
+      });
+      const next_parent_id = id;
 
-        for (let propName of Object.getOwnPropertyNames(node)) {
-          try {
-            if (typeof node[propName] === 'function') {
-              traverse(node[propName], join(path, propName), propName, next_parent_id)
-            }
-            if (typeof node[propName] === 'object') {
-              traverse(node[propName], join(path, propName), propName, next_parent_id);
-            }
-          } catch (err) {
-            console.warn(path, propName);
-            console.warn(err);
-            paths.push({
-              id: ++id,
-              path: join(path, propName),
-              parent_id
-            });
+      for (let propName of Object.getOwnPropertyNames(node)) {
+        const descriptor = Object.getOwnPropertyDescriptor(node, propName);
+
+        if (
+          (descriptor.value !== null && typeof descriptor.value === 'object') ||
+          (typeof descriptor.value === 'function')
+        ) {
+          if (!set.has(descriptor.value)) {
+            set.add(descriptor.value);
+            traverse(node[propName], join(path, propName), next_parent_id)
           }
+        }
+
+        if (descriptor.get && !set.has(descriptor.get)) {
+          set.add(descriptor.get);
+          traverse(descriptor.get, join(path, propName), next_parent_id)
+        }
+
+        if (descriptor.set && !set.has(descriptor.set)) {
+          set.add(descriptor.set);
+          traverse(descriptor.set, join(path, propName), next_parent_id)
         }
       }
     }
 
-    start.forEach(node => traverse(node, getName(node), getName(node)));
-    paths.sort((x, y) => x.parent_id - y.parent_id);
+    start.forEach(node => traverse(node, getName(node)));
     return paths;
   }
   console.log(generatePaths());
