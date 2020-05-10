@@ -21,8 +21,23 @@ function printBaseLine(req) {
 const server = http.createServer((req, res) => {
   printBaseLine(req);
   res.statusCode = 200;
-  res.setHeader('Content-Type', 'text/plain');
-  res.end('Hello, World!\n');
+  res.setHeader('Content-Type', 'text/html; charset=UTF-8');
+  res.setHeader('server', 'node.js http server');
+  res.end(`
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Hypertext Transfer Protocol</title>
+  <style>
+    body { font-size: 100px; }
+  </style>
+</head>
+<body>
+  <h1>hello world</h1>
+</body>
+</html>
+  `);
 });
 
 server.listen(port, hostname, () => {
