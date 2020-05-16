@@ -24,8 +24,7 @@ const server = http.createServer((req, res) => {
   res.setHeader('Content-Type', 'text/html; charset=UTF-8');
   res.setHeader('server', 'node.js http server');
   res.setHeader('Transfer-Encoding', 'chunked');
-  res.end(`<!DOCTYPE html>
-<html lang="en">
+  res.end(`<html lang="en">
 <head>
   <meta charset="utf-8" />
   <title>Hypertext Transfer Protocol</title>
