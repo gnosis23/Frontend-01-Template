@@ -8,14 +8,14 @@ function match(pattern, string) {
 
   let steps = [];
   for (let i = 0; i < pattern.length - 1; i++) {
-    steps.push(function (ch) {
+    steps[i] = function (ch) {
       if (ch === pattern[i + 1]) {
         return i === pattern.length - 2 ? end : steps[i+1];
       } else {
         const fallbackIndex = fallbacks[i];
         return fallbackIndex === -1 ? start(ch) : steps[fallbackIndex](ch);
       }
-    });
+    };
   }
   function start(ch) {
     return ch === string[0] ? steps[0] : start;
@@ -31,6 +31,10 @@ function match(pattern, string) {
   return state === end;
 }
 
+/**
+ * 构建回退偏移
+ * @param pattern 字符串
+ */
 function buildFallbacks(pattern) {
   let fallbacks = [];
   for (let i = 0; i < pattern.length; i++) {

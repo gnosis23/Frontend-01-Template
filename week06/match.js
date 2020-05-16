@@ -13,14 +13,14 @@ function match(string) {
 
   let steps = [];
   for (let i = 0; i < target.length - 1; i++) {
-    steps.push(function (ch) {
+    steps[i] = function (ch) {
       if (ch === target[i + 1]) {
         return i === target.length - 2 ? end : steps[i+1];
       } else {
         const fallbackIndex = fallbacks[i];
         return fallbackIndex === -1 ? start(ch) : steps[fallbackIndex](ch);
       }
-    });
+    };
   }
   function start(ch) {
     return ch === 'a' ? steps[0] : start;
