@@ -233,6 +233,7 @@ void async function() {
 
     let dom = parser.parseHTML(response.body)
 
+    console.log(JSON.stringify(dom, null, 2));
   } catch (err) {
     console.error(err);
   }
