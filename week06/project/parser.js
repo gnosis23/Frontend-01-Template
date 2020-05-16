@@ -2,7 +2,7 @@ let currentToken = null;
 let currentAttribute = null;
 
 function emit(token) {
-  console.log(token);
+  if (token.type !== 'text') console.log(token);
   // if (token.type !== 'text')
 }
 
@@ -15,7 +15,6 @@ function data(c) {
     emit({
       type: 'EOF'
     });
-    return;
   } else {
     emit({
       type: 'text',
@@ -35,7 +34,7 @@ function tagOpen(c) {
     }
     return tagName(c);
   } else {
-    return ;
+
   }
 }
 
@@ -60,13 +59,14 @@ function tagName(c) {
     return beforeAttributeName;
   } else if (c === '/') {
     return selfClosingStartTag;
-  } else if (c.match(/^[a-zA-Z]$/)) {
-    currentToken.tagName += c //.toLowerCase
+  } else if (c.match(/^[A-Z]$/)) {
+    currentToken.tagName += c.toLowerCase()
     return tagName;
   } else if (c === '>') {
     emit(currentToken);
     return data;
   } else {
+    currentToken.tagName += c
     return tagName;
   }
 }
@@ -75,7 +75,7 @@ function beforeAttributeName(c) {
   if (c.match(/^[\t\n\f ]$/)) {
     return beforeAttributeName;
   } else if (c === '/' || c === '>' || c === EOF) {
-    return afterAttributeName;
+    return afterAttributeName(c);
   } else if (c === '=') {
 
   } else {
@@ -102,6 +102,27 @@ function attributeName(c) {
   }
 }
 
+function afterAttributeName(c) {
+  if (c.match(/^[\t\n\f ]$/)) {
+    afterAttributeName
+  } else if (c === '/') {
+    return selfClosingStartTag
+  } else if (c === '=') {
+    return beforeAttributeValue
+  } else if (c === '>') {
+    emit(currentToken)
+    return data
+  } else if (c === EOF) {
+
+  } else {
+    currentAttribute = {
+      name: '',
+      value: ''
+    }
+    return attributeName(c)
+  }
+}
+
 function beforeAttributeValue(c) {
   if (c.match(/^[\t\n\f ]$/) || c === '/' || c === '>' || c === EOF) {
     return beforeAttributeValue;
@@ -117,11 +138,29 @@ function beforeAttributeValue(c) {
 }
 
 function doubleQuotedAttributeValue(c) {
+  if (c === '"') {
+    return afterQuotedAttributeValue;
+  } else if (c === '&') {
 
+  } else if (c === EOF) {
+
+  } else {
+    currentAttribute.value += c;
+    return doubleQuotedAttributeValue;
+  }
 }
 
 function singleQuotedAttributeValue(c) {
+  if (c === "'") {
+    return afterQuotedAttributeValue;
+  } else if (c === '&') {
 
+  } else if (c === EOF) {
+
+  } else {
+    currentAttribute.value += c;
+    return doubleQuotedAttributeValue;
+  }
 }
 
 function UnquotedAttributeValue(c) {
@@ -147,13 +186,26 @@ function UnquotedAttributeValue(c) {
   }
 }
 
-function afterAttributeName(c) {
+function afterQuotedAttributeValue(c) {
+  if (c.match(/^[\t\f\n ]$/)) {
+    currentToken[currentAttribute.name] = currentAttribute.value;
+    return beforeAttributeName
+  } else if (c === '/') {
+    currentToken[currentAttribute.name] = currentAttribute.value;
+    return selfClosingStartTag
+  } else if (c === '>') {
+    currentToken[currentAttribute.name] = currentAttribute.value;
+    emit(currentToken)
+    return data
+  } else {
 
+  }
 }
 
 function selfClosingStartTag(c) {
   if (c === '>') {
     currentToken.isSelfClosing = true;
+    emit(currentToken)
     return data;
   } else if (c === "EOF") {
 

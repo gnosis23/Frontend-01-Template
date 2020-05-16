@@ -34,6 +34,7 @@ const server = http.createServer((req, res) => {
 </head>
 <body>
   <h1>hello world</h1>
+  <img src="a" />
 </body>
 </html>`);
 });
