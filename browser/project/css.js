@@ -45,6 +45,29 @@ function match(element, selector) {
   return element.tagName === selector;
 }
 
+function specificity(selector) {
+  const p = [0, 0, 0, 0];
+  // FIXME: 这里只能处理最简单的选择器
+  const selectorParts = selector.split(" ");
+  for (let part of selectorParts) {
+    if (part.charAt(0) === '#') {
+      p[1] += 1;
+    } else if (part.charAt(0) === '.') {
+      p[2] += 1;
+    } else {
+      p[3] += 1;
+    }
+  }
+  return p;
+}
+
+function compare(sp1, sp2) {
+  for (let i = 0; i < 4; i++)
+    if (sp1[i] - sp2[i]) return sp1[i] - sp2[i];
+
+  return 0;
+}
+
 /**
  * 计算元素css
  * 创建 html 元素的时候还没有规则，等到规则加载完成后会进行 *重绘*
@@ -72,18 +95,22 @@ function computeCSS(element) {
     if (j >= selectorParts.length) matched = true;
 
     if (matched) {
+      let sp = specificity(rule.selectors[0]);
       let computedStyle = element.computedStyle;
       for (let declaration of rule.declarations) {
         if (!computedStyle[declaration.property])
           computedStyle[declaration.property] = {};
 
-        computedStyle[declaration.property].value = declaration.value;
+        if (!computedStyle[declaration.property].specificity) {
+          computedStyle[declaration.property].value = declaration.value;
+          computedStyle[declaration.property].specificity = sp;
+        } else if(compare(computedStyle[declaration.property].specificity, sp) <= 0) {
+          computedStyle[declaration.property].value = declaration.value;
+          computedStyle[declaration.property].specificity = sp;
+        }
       }
-      console.log(element.computedStyle);
     }
   }
-
-  // TODO: 加上行内样式
 }
 
 module.exports = {
