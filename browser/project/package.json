@@ -1,0 +1,17 @@
+{
+  "name": "toy-browser",
+  "version": "0.1.0",
+  "description": "",
+  "main": "client.js",
+  "dependencies": {
+    "css": "^2.2.4"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start-client": "node client.js",
+    "start-server": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT"
+}
