@@ -26,7 +26,23 @@ function getParents(element) {
 }
 
 function match(element, selector) {
-  return true;
+  if (!selector || !element.attributes) return false;
+
+  if (selector.charAt(0) === '#') {
+    const attr = element.attributes.find(attr => attr.name === 'id')
+    if (attr && attr.value === selector.replace('#', ''))
+      return true;
+  } else if (selector.charAt(0) === '.') {
+    // class可以用空格分割
+    const attr = element.attributes.find(attr => attr.name === 'class')
+    if (attr && attr.value) {
+      const classNames = attr.value.split(' ').filter(x => x);
+      if (classNames.some(name => name === selector.replace('.', '')))
+        return true;
+    }
+  }
+
+  return element.tagName === selector;
 }
 
 /**
@@ -40,8 +56,10 @@ function computeCSS(element) {
     element.computedStyle = {};
   }
 
-  let matched
   for (let rule of rules) {
+    let matched
+    // 其他情况:
+    // main>div.a#id[attr=value]
     const selectorParts = rule.selectors[0].split(' ').reverse();
 
     if (!match(element, selectorParts[0]))
@@ -57,6 +75,8 @@ function computeCSS(element) {
       console.log("Element", element.tagName, "rule", rule.selectors)
     }
   }
+
+  // TODO: 加上行内样式
 }
 
 module.exports = {

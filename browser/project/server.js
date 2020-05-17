@@ -31,6 +31,7 @@ const server = http.createServer((req, res) => {
   <style>
     body { font-size: 100px; }
     body h1 { color: #111; }
+    div { margin: 0; padding: 0; }
     .mainWrapper { margin: 20px; border-top: 10px; display: flex }
     .mainWrapper .left { width: 200px; }
     .mainWrapper .right { flex: 1 }
@@ -39,6 +40,13 @@ const server = http.createServer((req, res) => {
 <body>
   <h1>hello world</h1>
   <img src="https://www.baidu.com" alt="head" />
+  <div class="mainWrapper">
+    <header class="left">big head</header>
+    <section class="right">
+      <h1>gaga</h1>
+      <article class=" left test right ">hello</article>
+    </section>
+  </div>
 </body>
 </html>`);
 });
