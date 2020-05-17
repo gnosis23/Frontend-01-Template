@@ -72,7 +72,14 @@ function computeCSS(element) {
     if (j >= selectorParts.length) matched = true;
 
     if (matched) {
-      console.log("Element", element.tagName, "rule", rule.selectors)
+      let computedStyle = element.computedStyle;
+      for (let declaration of rule.declarations) {
+        if (!computedStyle[declaration.property])
+          computedStyle[declaration.property] = {};
+
+        computedStyle[declaration.property].value = declaration.value;
+      }
+      console.log(element.computedStyle);
     }
   }
 
