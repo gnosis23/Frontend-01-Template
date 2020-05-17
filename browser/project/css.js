@@ -25,6 +25,10 @@ function getParents(element) {
   return elements;
 }
 
+function match(element, selector) {
+  return true;
+}
+
 /**
  * 计算元素css
  * 创建 html 元素的时候还没有规则，等到规则加载完成后会进行 *重绘*
@@ -32,7 +36,27 @@ function getParents(element) {
  */
 function computeCSS(element) {
   const elements = getParents(element);
-  console.log(element);
+  if (!element.computedStyle) {
+    element.computedStyle = {};
+  }
+
+  let matched
+  for (let rule of rules) {
+    const selectorParts = rule.selectors[0].split(' ').reverse();
+
+    if (!match(element, selectorParts[0]))
+      continue;
+
+    let j = 1;
+    for (let i = 0; i < elements.length && selectorParts.length > j; i++) {
+      if (match(elements[i], selectorParts[j])) j++;
+    }
+    if (j >= selectorParts.length) matched = true;
+
+    if (matched) {
+      console.log("Element", element.tagName, "rule", rule.selectors)
+    }
+  }
 }
 
 module.exports = {
