@@ -23,7 +23,8 @@ function emit(token) {
     let element = {
       type: 'element',
       children: [],
-      attributes: []
+      attributes: [],
+      parentNode: top
     }
 
     element.tagName = token.tagName
