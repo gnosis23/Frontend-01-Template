@@ -1,4 +1,4 @@
-const { addCSSRules } = require('./css');
+const { addCSSRules, computeCSS } = require('./css');
 
 let currentToken = null
 let currentAttribute = null
@@ -37,6 +37,10 @@ function emit(token) {
         })
       }
     }
+
+    // 计算css为什么要放在创建元素的时候？
+    // 早点计算利于后面计算和显示
+    computeCSS(element);
 
     top.children.push(element)
 
