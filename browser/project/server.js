@@ -30,11 +30,15 @@ const server = http.createServer((req, res) => {
   <title>Hypertext Transfer Protocol</title>
   <style>
     body { font-size: 100px; }
+    body h1 { color: #111; }
+    .mainWrapper { margin: 20px; border-top: 10px; display: flex }
+    .mainWrapper .left { width: 200px; }
+    .mainWrapper .right { flex: 1 }
   </style>
 </head>
 <body>
   <h1>hello world</h1>
-  <img src="a" />
+  <img src="https://www.baidu.com" alt="head" />
 </body>
 </html>`);
 });

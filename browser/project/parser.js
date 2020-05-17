@@ -1,3 +1,5 @@
+const { addCSSRules } = require('./css');
+
 let currentToken = null
 let currentAttribute = null
 let currentTextNode = null
@@ -5,11 +7,19 @@ let currentTextNode = null
 let stack = [{type: 'document', children: []}]
 
 function emit(token) {
-  if (token.type === 'text')
-    return
   let top = stack[stack.length - 1]
 
-  if (token.type === 'startTag') {
+  if (token.type === 'text') {
+    if (currentTextNode === null) {
+      currentTextNode = {
+        type: 'text',
+        content: ''
+      };
+      top.children.push(currentTextNode);
+    }
+    currentTextNode.content += token.content;
+  }
+  else if (token.type === 'startTag') {
     let element = {
       type: 'element',
       children: [],
@@ -40,6 +50,10 @@ function emit(token) {
     if (top.tagName !== token.tagName) {
       throw new Error('Tag start end mis match')
     } else {
+      // 遇到style标签时，执行添加css规则的操作
+      if (top.tagName === 'style') {
+        addCSSRules(top.children[0].content);
+      }
       stack.pop()
     }
     currentTextNode = null
