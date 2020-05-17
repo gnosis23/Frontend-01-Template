@@ -180,7 +180,7 @@ class TrunkedBodyParser {
     if (this.current === this.WAITING_LENGTH) {
       if  (char === '\r') {
         this.current = this.WAITING_LENGTH_LINE_END;
-      } else if (char === '0') {
+      } else if (char === '0' && this.length === 0) {
         this.isFinished = true;
         this.current = this.OVER;
       } else {
