@@ -191,7 +191,6 @@ function computeCSS(element) {
 
   for (let rule of rules) {
     // 其他情况:
-    // main>div.a#id[attr=value]
     const selectorParts = parseSelector(rule.selectors[0]).reverse();
 
     const matched = matchSelector(elementList, selectorParts);
