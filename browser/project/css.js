@@ -49,7 +49,7 @@ function getAttribute(element, attributeName) {
  * @returns {boolean}
  */
 function match(element, selector) {
-  if (!selector || !element.attributes) return false;
+  if (!selector || !element || !element.attributes) return false;
 
   // 1 匹配 tag
   if (selector.tagName) {
@@ -99,8 +99,8 @@ function specificity(selectorParts) {
   const p = [0, 0, 0, 0];
   for (let part of selectorParts) {
     p[1] += (part.ids.length > 0 ? 1 : 0);
-    p[2] += part.classes.length;
-    p[3] += part.attributes.length;
+    p[2] += (part.classes.length + part.attributes.length);
+    p[3] += (part.tagName ? 1 : 0);
   }
   return p;
 }
@@ -112,6 +112,70 @@ function compare(sp1, sp2) {
   return 0;
 }
 
+function matchSelector(elements, selectorParts) {
+  if (!match(elements[0], selectorParts[0]))
+    return false;
+
+  elements = elements.slice();
+  let j = 1;
+  let i = 0;
+  let combinator = selectorParts[0].combinator;
+  if (combinator === ' ' || combinator === '>') {i++;}
+
+  while (i < elements.length && selectorParts.length > j) {
+    if (combinator === ' ') {
+      // 1 下降关系匹配，不匹配就找父结点
+      if (match(elements[i], selectorParts[j])) {
+        combinator = selectorParts[j].combinator;
+        if (combinator === ' ' || combinator === '>') i++;
+        j++;
+      } else {
+        i++;
+      }
+    } else if (combinator === '+') {
+      // 2 相邻关系匹配，找前一个结点。不匹配就失败
+      if (match(elements[i].previousElementSibling, selectorParts[j])) {
+        // 相邻可以连续
+        elements[i] = elements[i].previousElementSibling;
+        combinator = selectorParts[j].combinator;
+        if (combinator === ' ' || combinator === '>') i++;
+        j++;
+      } else {
+        return false;
+      }
+    } else if (combinator === '~') {
+      // 3 非相邻同集匹配，往前一直找，一直找到为止。不匹配就失败
+      let nextNode = elements[i].previousElementSibling;
+      let found = false;
+      while (nextNode) {
+        if (match(nextNode, selectorParts[j])) {
+          elements[i] = nextNode;
+          combinator = selectorParts[j].combinator;
+          if (combinator === ' ' || combinator === '>') i++;
+          j++;
+          found = true;
+          break;
+        }
+        nextNode = nextNode.previousElementSibling;
+      }
+      if (!found) return false;
+    } else if (combinator === '>') {
+      // 4 父子关系匹配，不匹配直接失败
+      if (match(elements[i], selectorParts[j])) {
+        combinator = selectorParts[j].combinator;
+        if (combinator === ' ' || combinator === '>') i++;
+        j++;
+      } else {
+        return false;
+      }
+    } else {
+      throw new Error('unknown combinator ' + combinator);
+    }
+  }
+
+  return j >= selectorParts.length;
+}
+
 /**
  * 计算元素css
  * 创建 html 元素的时候还没有规则，等到规则加载完成后会进行 *重绘*
@@ -119,24 +183,18 @@ function compare(sp1, sp2) {
  */
 function computeCSS(element) {
   const elements = getParents(element);
+  const elementList = [element, ...elements];
+
   if (!element.computedStyle) {
     element.computedStyle = {};
   }
 
   for (let rule of rules) {
-    let matched
     // 其他情况:
     // main>div.a#id[attr=value]
     const selectorParts = parseSelector(rule.selectors[0]).reverse();
 
-    if (!match(element, selectorParts[0]))
-      continue;
-
-    let j = 1;
-    for (let i = 0; i < elements.length && selectorParts.length > j; i++) {
-      if (match(elements[i], selectorParts[j])) j++;
-    }
-    if (j >= selectorParts.length) matched = true;
+    const matched = matchSelector(elementList, selectorParts);
 
     if (matched) {
       // console.log(rule.selectors[0], '-', element.tagName);

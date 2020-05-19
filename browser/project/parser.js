@@ -24,7 +24,8 @@ function emit(token) {
       type: 'element',
       children: [],
       attributes: [],
-      parentNode: top
+      parentNode: top,
+      previousElementSibling: null
     }
 
     element.tagName = token.tagName
@@ -39,11 +40,20 @@ function emit(token) {
       }
     }
 
+    if (top.children.length > 0) {
+      for (let i = top.children.length - 1; i >= 0; --i) {
+        if (top.children[i].type !== 'text') {
+          element.previousElementSibling = top.children[i];
+          break;
+        }
+      }
+    }
+
     // 计算css为什么要放在创建元素的时候？
     // 早点计算利于后面计算和显示
     computeCSS(element);
 
-    top.children.push(element)
+    top.children.push(element);
 
     if (!token.isSelfClosing) {
       stack.push(element)

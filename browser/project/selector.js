@@ -67,7 +67,7 @@ class Parser {
     this.tokens = props.tokens || [];
     this.cursor = 0;
     this._selectors = [];
-    this._combinator = null;
+    this._combinator = ' ';
   }
 
   get top() {
@@ -154,7 +154,7 @@ class Parser {
       attributes: [],
       combinator: this._combinator
     });
-    this._combinator = null;
+    this._combinator = ' ';
 
     const lookahead = this.lookahead;
     if (this.lookaheadType === 'ident') {

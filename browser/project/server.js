@@ -39,6 +39,10 @@ const server = http.createServer((req, res) => {
     img[src] { font-size: 100px; }
     [alt] { color: red; }
     div header.left + section#gaga { background: green; }
+    section.right>h1 { color: blue; }
+    img + div > header + section + div + div.last { color: #22777f; }
+    img + div > header ~div.last { color: #22777f; }
+    img ~ div > header ~div ~div.last { color: #22777f; }
   </style>
 </head>
 <body>
@@ -50,6 +54,8 @@ const server = http.createServer((req, res) => {
       <h1>gaga</h1>
       <article class=" left test right ">hello</article>
     </section>
+    <div>111</div>
+    <div class="last">222</div>
   </div>
 </body>
 </html>`);
