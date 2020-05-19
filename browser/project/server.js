@@ -36,6 +36,9 @@ const server = http.createServer((req, res) => {
     #gaga { flex: 2 }
     .mainWrapper .left { width: 200px; }
     .mainWrapper .right { flex: 1 }
+    img[src] { font-size: 100px; }
+    [alt] { color: red; }
+    div header.left + section#gaga { background: green; }
   </style>
 </head>
 <body>

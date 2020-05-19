@@ -1,4 +1,5 @@
 const css = require('css');
+const { parseSelector } = require('./selector');
 
 // 每加入一个新的函数，addCSSRules，这里我们把CSS规则暂存到一个数组里
 let rules = [];
@@ -25,38 +26,81 @@ function getParents(element) {
   return elements;
 }
 
+/**
+ * 获取属性名称
+ * @param element
+ * @param attributeName
+ * @return null | Object
+ */
+function getAttribute(element, attributeName) {
+  const attrs = element.attributes || [];
+  return attrs.find(x => x.name === attributeName);
+}
+
+/**
+ * 匹配元素与选择器，须满足如下所有条件：
+ * 1 如果选择器有tag名称，匹配
+ * 2 如果选择器有id名称，匹配
+ * 3 如果选择器有class名称，匹配
+ * 4 如果选择器有attributes，匹配
+ *
+ * @param element
+ * @param selector
+ * @returns {boolean}
+ */
 function match(element, selector) {
   if (!selector || !element.attributes) return false;
 
-  if (selector.charAt(0) === '#') {
-    const attr = element.attributes.find(attr => attr.name === 'id')
-    if (attr && attr.value === selector.replace('#', ''))
-      return true;
-  } else if (selector.charAt(0) === '.') {
-    // class可以用空格分割
-    const attr = element.attributes.find(attr => attr.name === 'class')
-    if (attr && attr.value) {
-      const classNames = attr.value.split(' ').filter(x => x);
-      if (classNames.some(name => name === selector.replace('.', '')))
-        return true;
+  // 1 匹配 tag
+  if (selector.tagName) {
+    if (selector.tagName !== element.tagName)
+      return false;
+  }
+
+  // 2 匹配 id
+  if (selector.ids.length > 0) {
+    const attr = getAttribute(element, 'id');
+    if (!attr || attr.value !== selector.ids[0])
+      return false;
+  }
+
+  // 3 匹配 class
+  if (selector.classes.length > 0) {
+    const attr = getAttribute(element, 'class');
+    if (!attr) return false;
+
+    const classNames = attr.value ? attr.value.split(' ').filter(x => x) : [];
+    for (let i = 0; i < selector.classes.length; ++i) {
+      if (!classNames.includes(selector.classes[i]))
+        return false;
     }
   }
 
-  return element.tagName === selector;
+  // 4 匹配 attributes
+  if (selector.attributes.length > 0) {
+    for (let i = 0; i < selector.attributes.length; ++i) {
+      const selectorAttr = selector.attributes[i];
+      const elementAttr = getAttribute(element, selectorAttr.name);
+
+      if (!elementAttr) return false;
+      if (selector.operator) {
+        // todo: 这里先只考虑=号
+        if (selectorAttr.operand !== elementAttr.value)
+          return false;
+      }
+    }
+  }
+
+  // return element.tagName === selector;
+  return true;
 }
 
-function specificity(selector) {
+function specificity(selectorParts) {
   const p = [0, 0, 0, 0];
-  // FIXME: 这里只能处理最简单的选择器
-  const selectorParts = selector.split(" ");
   for (let part of selectorParts) {
-    if (part.charAt(0) === '#') {
-      p[1] += 1;
-    } else if (part.charAt(0) === '.') {
-      p[2] += 1;
-    } else {
-      p[3] += 1;
-    }
+    p[1] += (part.ids.length > 0 ? 1 : 0);
+    p[2] += part.classes.length;
+    p[3] += part.attributes.length;
   }
   return p;
 }
@@ -83,7 +127,7 @@ function computeCSS(element) {
     let matched
     // 其他情况:
     // main>div.a#id[attr=value]
-    const selectorParts = rule.selectors[0].split(' ').reverse();
+    const selectorParts = parseSelector(rule.selectors[0]).reverse();
 
     if (!match(element, selectorParts[0]))
       continue;
@@ -95,7 +139,8 @@ function computeCSS(element) {
     if (j >= selectorParts.length) matched = true;
 
     if (matched) {
-      let sp = specificity(rule.selectors[0]);
+      // console.log(rule.selectors[0], '-', element.tagName);
+      let sp = specificity(selectorParts);
       let computedStyle = element.computedStyle;
       for (let declaration of rule.declarations) {
         if (!computedStyle[declaration.property])
