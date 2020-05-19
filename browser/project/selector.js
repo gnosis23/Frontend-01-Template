@@ -4,7 +4,6 @@
  */
 
 const TokenRegs = [
-  { type: 'space', pattern: /^[ \t\r\n\f]+/ },
   { type: 'includes', pattern: /^~=/ },
   { type: 'dash-match', pattern: /^\|=/ },
   { type: 'prefix-match', pattern: /^\^=/ },
@@ -28,7 +27,8 @@ const TokenRegs = [
   { type: 'plus', pattern: /^[ \t\r\n\f]*\+/ },
   { type: 'greater', pattern: /^[ \t\r\n\f]*>/ },
   { type: 'comma', pattern: /^[ \t\r\n\f]*,/ },
-  { type: 'tilde', pattern: /^[ \t\r\n\f]*~/ }
+  { type: 'tilde', pattern: /^[ \t\r\n\f]*~/ },
+  { type: 'space', pattern: /^[ \t\r\n\f]+/ },
 ];
 
 class Lexer {
@@ -137,6 +137,9 @@ class Parser {
       // space
       this.expect('space');
       this._combinator = ' ';
+    }
+    if (this.lookahead === ' ') {
+      this.expect('space');
     }
   }
 
