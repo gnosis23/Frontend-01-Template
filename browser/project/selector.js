@@ -11,7 +11,7 @@ const TokenRegs = [
   { type: 'suffix-match', pattern: /^\$=/ },
   { type: 'substring-match', pattern: /^\*=/ },
   // fixme：escape
-  { type: 'ident', pattern: /^-?([_a-z]|[^\u0000-\u00b1])([_a-z0-9-]|[^\u0000-\u00b1])*/ },
+  { type: 'ident', pattern: /^-?([_a-zA-Z]|[^\u0000-\u00b1])([_a-zA-Z0-9-]|[^\u0000-\u00b1])*/ },
   // fixme: escape
   {
     type: 'double-quoted-string',
@@ -23,7 +23,7 @@ const TokenRegs = [
   },
   {
     type: 'hash',
-    pattern: /^#([_a-z0-9-]|[^\u0000-\u00b1])+/
+    pattern: /^#([_a-zA-Z0-9-]|[^\u0000-\u00b1])+/
   },
   { type: 'plus', pattern: /^[ \t\r\n\f]*\+/ },
   { type: 'greater', pattern: /^[ \t\r\n\f]*>/ },
