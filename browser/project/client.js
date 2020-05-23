@@ -5,7 +5,8 @@
  */
 
 const net = require('net');
-const parser = require('./parser')
+const parser = require('./parser');
+const { createViewPort, render } = require('./render');
 
 class Request {
   // method, url = host + port + path
@@ -233,7 +234,11 @@ void async function() {
 
     let dom = parser.parseHTML(response.body)
 
+    let viewport = createViewPort(800, 600);
 
+    render(viewport, dom);
+
+    viewport.save('viewport.jpg');
   } catch (err) {
     console.error(err);
   }
