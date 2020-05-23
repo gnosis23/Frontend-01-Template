@@ -1,4 +1,5 @@
 const css = require('css');
+const camelcase = require('camelcase');
 const { parseSelector } = require('./selector');
 
 // 每加入一个新的函数，addCSSRules，这里我们把CSS规则暂存到一个数组里
@@ -200,15 +201,16 @@ function computeCSS(element) {
       let sp = specificity(selectorParts);
       let computedStyle = element.computedStyle;
       for (let declaration of rule.declarations) {
-        if (!computedStyle[declaration.property])
-          computedStyle[declaration.property] = {};
+        const property = camelcase(declaration.property)
+        if (!computedStyle[property])
+          computedStyle[property] = {};
 
-        if (!computedStyle[declaration.property].specificity) {
-          computedStyle[declaration.property].value = declaration.value;
-          computedStyle[declaration.property].specificity = sp;
-        } else if(compare(computedStyle[declaration.property].specificity, sp) <= 0) {
-          computedStyle[declaration.property].value = declaration.value;
-          computedStyle[declaration.property].specificity = sp;
+        if (!computedStyle[property].specificity) {
+          computedStyle[property].value = declaration.value;
+          computedStyle[property].specificity = sp;
+        } else if(compare(computedStyle[property].specificity, sp) <= 0) {
+          computedStyle[property].value = declaration.value;
+          computedStyle[property].specificity = sp;
         }
       }
     }

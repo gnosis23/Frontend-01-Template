@@ -4,6 +4,7 @@
   "description": "",
   "main": "client.js",
   "dependencies": {
+    "camelcase": "^6.0.0",
     "css": "^2.2.4"
   },
   "devDependencies": {},
