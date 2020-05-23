@@ -364,6 +364,7 @@ function layout(element) {
     crossBase += crossSign * (lineCrossSize + step);
   });
 
+  // console.log(flexLines);
 }
 
 module.exports = layout;

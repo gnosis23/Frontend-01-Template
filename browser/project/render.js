@@ -2,21 +2,35 @@
  * render
  *
  */
+const fs = require('fs');
+const Path = require('path');
 
-class ViewPort {
+class SvgViewPort {
   constructor(width, height) {
     this.width = width;
     this.height = height;
     this.children = [];
   }
-  draw(img, left, top) {
+  addToCanvas(img, left, top) {
     if (!img.width || !img.height) return;
     img.left = left;
     img.top = top;
     this.children.push(img);
   }
+  draw(item) {
+    let text = `<rect width="${item.width}" height="${item.height}" fill="${item.color}"`;
+    text += ` x="${item.left}" y="${item.top}"`;
+    text += ' />\n'
+    return text;
+  }
   save(path) {
-    console.log(this.children);
+    let text = `<svg version="1.1" width="${this.width}" height="${this.height}" xmlns="http://www.w3.org/2000/svg">\n`;
+    this.children.forEach(node => {
+      text += this.draw(node);
+    });
+    text += `</svg>`;
+    // console.log(text);
+    fs.writeFileSync(Path.join('./build/', path), text);
   }
 }
 
@@ -32,7 +46,7 @@ class Rect {
 }
 
 function createViewPort(width, height) {
-  return new ViewPort(width, height);
+  return new SvgViewPort(width, height);
 }
 
 function createImage(width, height) {
@@ -46,7 +60,7 @@ function render(viewport, element) {
     let color = element.style['backgroundColor'] || 'rgb(0,0,0)';
     color.match(/rgb\((\d+),(\d+),(\d+)\)/);
     img.fill(Number(RegExp.$1), Number(RegExp.$2), Number(RegExp.$3));
-    viewport.draw(img, element.style.left || 0, element.style.top || 0);
+    viewport.addToCanvas(img, element.style.left || 0, element.style.top || 0);
   }
 
   if (element.children) {

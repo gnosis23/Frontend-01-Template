@@ -234,11 +234,11 @@ void async function() {
 
     let dom = parser.parseHTML(response.body)
 
-    let viewport = createViewPort(800, 600);
+    let viewport = createViewPort(800, 800);
 
     render(viewport, dom);
 
-    viewport.save('viewport.jpg');
+    viewport.save('viewport.svg');
   } catch (err) {
     console.error(err);
   }
