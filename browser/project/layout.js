@@ -1,4 +1,12 @@
+/**
+ * flex layout
+ */
 
+/**
+ * 获取style属性，必要时初始化
+ * @param element
+ * @returns {Object}
+ */
 function getStyle(element) {
   if (!element.style)
     element.style = {};
@@ -114,6 +122,73 @@ function layout(element) {
     crossBase = 0;
     crossSign = 1;
   }
+
+  // 主轴大小
+  let isAutoMainSize = false;
+  if (!style[mainSize]) {
+    elementStyle[mainSize] = 0;
+    for (let i = 0; i < items.length; i++) {
+      let item = items[i];
+      let itemStyle = getStyle(item);
+      if (itemStyle[mainSize] !== undefined && itemStyle[mainSize] !== 'auto')
+        elementStyle[mainSize] = elementStyle[mainSize] + itemStyle[mainSize];
+    }
+    isAutoMainSize = true;
+  }
+
+  let flexLine = [];
+  let flexLines = [flexLine];
+
+  let mainSpace = elementStyle[mainSize];
+  let crossSpace = 0;
+
+  for (let i = 0; i < items.length; i++) {
+    let item = items[i];
+    let itemStyle = getStyle(item);
+
+    if (itemStyle[mainSize] === null || itemStyle[mainSize] === undefined) {
+      itemStyle[mainSize] = 0;
+    }
+
+    if (itemStyle.flex) {
+      flexLine.push(item);
+      if (itemStyle[crossSize] !== null && itemStyle[crossSize] !== undefined) {
+        crossSpace = Math.max(crossSpace, itemStyle[crossSize]);
+      }
+    }
+    else if (style.flexWrap === 'nowrap' && isAutoMainSize) {
+      mainSpace -= itemStyle[mainSize];
+      flexLine.push(item);
+      if (itemStyle[crossSize] !== null && itemStyle[crossSize] !== undefined) {
+        crossSpace = Math.max(crossSpace, itemStyle[crossSize]);
+      }
+    }
+    else {
+      if (itemStyle[mainSize] > style[mainSize]) {
+        itemStyle[mainSize] = style[mainSize];
+      }
+      if (mainSpace < itemStyle[mainSize]) {
+        flexLine.mainSpace = mainSpace;
+        flexLine.crossSpace = crossSpace;
+
+        flexLine = [];
+        flexLines.push(flexLine);
+
+        flexLine.push(item);
+
+        mainSpace = style[mainSize];
+        crossSpace = 0;
+      } else {
+        flexLine.push(item);
+      }
+      mainSpace -= itemStyle[mainSize];
+      if (itemStyle[crossSize] !== null && itemStyle[crossSize] !== undefined) {
+        crossSpace = Math.max(crossSpace, itemStyle[crossSize]);
+      }
+    }
+  }
+  flexLine.mainSpace = mainSpace;
+  // 漏了crossSpace？
 }
 
 module.exports = layout;

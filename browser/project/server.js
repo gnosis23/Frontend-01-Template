@@ -32,17 +32,17 @@ const server = http.createServer((req, res) => {
     body { font-size: 100px; }
     body h1 { color: #111; }
     div { margin: 0; padding: 0; }
-    .mainWrapper { margin: 20px; border-top: 10px; display: flex }
+    .mainWrapper { margin: 20px; border-top: 10px; display: flex; width: 250px; flex-wrap: wrap; }
     #gaga { flex: 2 }
     .mainWrapper .left { width: 200px; }
-    .mainWrapper .right { flex: 1 }
+    .mainWrapper .right { flex: 1; height: 500px }
     img[src] { font-size: 100px; }
     [alt] { color: red; }
     div header.left + section#gaga { background: green; }
     section.right>h1 { color: blue; }
     img + div > header + section + div + div.last { color: #22777f; }
     img + div > header ~div.last { color: #22777f; }
-    img ~ div > header ~div ~div.last { color: #22777f; }
+    img ~ div > header ~div ~div.last { color: #22777f; width: 100px; }
   </style>
 </head>
 <body>
