@@ -44,6 +44,7 @@ const server = http.createServer((req, res) => {
     #gaga + div { width: 150px; height: 250px; background-color: rgb(223,0,0) }
     img + div > header ~div.last { background-color: rgb(250,250,84); width: 200px; height: 200px; }
     .last + div { flex: 1; background-color: rgb(236,158,79) }
+    div.mainWrapper > div:not(.last) { background-color: rgb(223,0,232) }
   </style>
 </head>
 <body>

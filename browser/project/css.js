@@ -58,10 +58,21 @@ function match(element, selector) {
       return false;
   }
 
+  if (selector.notTagNames.length > 0) {
+    if (selector.notTagNames.includes(element.tagName))
+      return false;
+  }
+
   // 2 匹配 id
   if (selector.ids.length > 0) {
     const attr = getAttribute(element, 'id');
     if (!attr || attr.value !== selector.ids[0])
+      return false;
+  }
+
+  if (selector.notIds.length > 0) {
+    const attr = getAttribute(element, 'id');
+    if (attr && selector.notIds.includes(attr.value))
       return false;
   }
 
@@ -74,6 +85,18 @@ function match(element, selector) {
     for (let i = 0; i < selector.classes.length; ++i) {
       if (!classNames.includes(selector.classes[i]))
         return false;
+    }
+  }
+
+  if (selector.notClasses.length > 0) {
+    const attr = getAttribute(element, 'class');
+
+    if (attr) {
+      const classNames = attr.value ? attr.value.split(' ').filter(x => x) : [];
+      for (let i = 0; i < selector.notClasses.length; ++i) {
+        if (classNames.includes(selector.notClasses[i]))
+          return false;
+      }
     }
   }
 
@@ -92,16 +115,23 @@ function match(element, selector) {
     }
   }
 
+  // todo: notAttributes
+
   // return element.tagName === selector;
   return true;
 }
 
 function specificity(selectorParts) {
   const p = [0, 0, 0, 0];
+  // Selectors inside the negation pseudo-class are counted like any other,
+  // but the negation itself does not count as a pseudo-class.
   for (let part of selectorParts) {
     p[1] += (part.ids.length > 0 ? 1 : 0);
+    p[1] += part.notIds.length;
     p[2] += (part.classes.length + part.attributes.length);
+    p[2] += (part.notClasses.length + part.notAttributes.length);
     p[3] += (part.tagName ? 1 : 0);
+    p[3] += part.notTagNames.length;
   }
   return p;
 }

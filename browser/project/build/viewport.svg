@@ -2,7 +2,7 @@
   <rect width="500" height="500" x="0" y="0" fill="rgb(233,233,233)"/>
   <rect width="200" height="250" x="16.666666666666668" y="0" fill="rgb(11,222,33)"/>
   <rect width="50" height="50" x="250" y="0" fill="rgb(27,239,208)"/>
-  <rect width="150" height="250" x="333.3333333333333" y="0" fill="rgb(223,0,0)"/>
+  <rect width="150" height="250" x="333.3333333333333" y="0" fill="rgb(223,0,232)"/>
   <rect width="200" height="200" x="0" y="300" fill="rgb(250,250,84)"/>
-  <rect width="300" height="200" x="200" y="300" fill="rgb(236,158,79)"/>
+  <rect width="300" height="200" x="200" y="300" fill="rgb(223,0,232)"/>
 </svg>
