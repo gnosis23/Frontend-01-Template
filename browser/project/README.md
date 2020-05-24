@@ -7,7 +7,7 @@ npm install
 # 打开服务器
 node ./server 
 # 打开客户端
-node .client
+node ./client
 # 浏览器打开 build/viewport.svg
 ```
 
