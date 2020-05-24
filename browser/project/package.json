@@ -5,12 +5,15 @@
   "main": "client.js",
   "dependencies": {
     "camelcase": "^6.0.0",
-    "css": "^2.2.4"
+    "chai": "^4.2.0",
+    "css": "^2.2.4",
+    "mocha": "^7.2.0"
   },
   "devDependencies": {},
   "scripts": {
     "start-client": "node client.js",
-    "start-server": "node server.js"
+    "start-server": "node server.js",
+    "test": "mocha"
   },
   "keywords": [],
   "author": "",
