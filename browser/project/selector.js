@@ -28,6 +28,7 @@ const TokenRegs = [
   { type: 'greater', pattern: /^[ \t\r\n\f]*>/ },
   { type: 'comma', pattern: /^[ \t\r\n\f]*,/ },
   { type: 'tilde', pattern: /^[ \t\r\n\f]*~/ },
+  { type: 'not', pattern: /^:not\(/ },
   { type: 'space', pattern: /^[ \t\r\n\f]+/ },
 ];
 
@@ -152,7 +153,11 @@ class Parser {
       ids: [],
       classes: [],
       attributes: [],
-      combinator: this._combinator
+      combinator: this._combinator,
+      notTagNames: [],
+      notIds: [],
+      notClasses: [],
+      notAttributes: []
     });
     this._combinator = ' ';
 
@@ -161,7 +166,7 @@ class Parser {
       const element_name = this.expect('ident');
       this.top.tagName = element_name.text;
       this.parseHashClassAttribute(false);
-    } else if (['[', '.', '#'].includes(lookahead)) {
+    } else if (['[', '.', '#', ':'].includes(lookahead)) {
       this.parseHashClassAttribute(true);
     } else {
       throw new Error();
@@ -173,11 +178,17 @@ class Parser {
     let next = null
     if (lookahead === '#') {
       next = this.expect('hash');
-      this.top.ids.push(next.text.substring(1));
+      if (this._inNot) {
+        this.top.notIds.push(next.text.substring(1));
+      } else {
+        this.top.ids.push(next.text.substring(1));
+      }
     } else if (lookahead === '.') {
       this.parseClass();
     } else if (lookahead === '[') {
       this.parseAttrib();
+    } else if (lookahead === ':') {
+      this.parseNegation();
     } else if (strict) {
       throw new Error('')
     } else {
@@ -190,7 +201,11 @@ class Parser {
   parseClass() {
     this.expect('single', '.');
     const ident = this.expect('ident');
-    this.top.classes.push(ident.text);
+    if (this._inNot) {
+      this.top.notClasses.push(ident.text);
+    } else {
+      this.top.classes.push(ident.text);
+    }
   }
 
   parseAttrib() {
@@ -233,11 +248,36 @@ class Parser {
     }
     this.expect('single', ']');
 
-    this.top.attributes.push({
-      name: ident.text,
-      operator,
-      operand: operand ? operand.text : null
-    });
+    if (this._inNot) {
+      this.top.notAttributes.push({
+        name: ident.text,
+        operator,
+        operand: operand ? operand.text : null
+      });
+    } else {
+      this.top.attributes.push({
+        name: ident.text,
+        operator,
+        operand: operand ? operand.text : null
+      });
+    }
+  }
+
+  parseNegation() {
+    this.expect('not');
+    this._inNot = true;
+    if (this.lookaheadType === 'space') this.expect('space');
+    if (this.lookaheadType === 'ident') {
+      const element_name = this.expect('ident');
+      this.top.notTagNames.push(element_name.text);
+    } else if (['[', '.', '#'].includes(this.lookahead)) {
+      this.parseHashClassAttribute(true);
+    } else {
+      throw new Error();
+    }
+    if (this.lookaheadType === 'space') this.expect('space');
+    this.expect('single', ')');
+    this._inNot = false;
   }
 }
 

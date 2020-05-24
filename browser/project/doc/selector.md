@@ -47,8 +47,8 @@ combinator
  
 simple_selector_sequence
    : IDENT
-     [ HASH | class | attrib | pseudo | negation ]*
-   | [ HASH | class | attrib | pseudo | negation ]+
+     [ HASH | class | attrib | negation ]*
+   | [ HASH | class | attrib | negation ]+
    ;
  
 class
@@ -65,6 +65,10 @@ attrib
             DASHMATCH ] S* [ IDENT | STRING ] S*
         ]? ']'
   ;
+
+negation
+  : NOT S* [ type_selector | universal | HASH | class | attrib | pseudo] S* ')'
+  ;
 ```
 
 
@@ -76,7 +80,11 @@ declare type Selector = {
     tagName?: String;       // 标签名可以为空
     ids: String[];          // id名 
     classes: String[];      // class名
-    attributes: String[];   // 属性名，{ name, operator, operand }
+    attributes: Object[];   // 属性名，{ name, operator, operand }
+    notTagNames: String[];   // 非标签名
+    notIds: String[];       // 非id
+    notClasses: String[];   // 非class
+    notAttributes: Object[];// 非属性名
     isUniversal: Boolean;   // 是否为通配符
     combinator?: String;    // 与上层选择器的关系，比如 子孙、直接父子、邻居、亲戚...
 }
