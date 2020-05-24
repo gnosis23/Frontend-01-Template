@@ -16,7 +16,7 @@ node ./client
 .
 ├── build           # 输出文件
 ├── doc             # 相关组件文档
-├── test
+├── test            # 单元测试
 ├── adaptor         # 渲染器适配
 ├── client.js       # 浏览器客户端
 ├── css.js          # 样式计算

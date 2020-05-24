@@ -1,5 +1,5 @@
 const { addCSSRules, computeCSS } = require('./css');
-const layout = require('./layout');
+const { layout } = require('./layout');
 
 let currentToken = null
 let currentAttribute = null

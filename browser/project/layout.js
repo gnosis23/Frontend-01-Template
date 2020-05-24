@@ -26,10 +26,83 @@ function getStyle(element) {
   return element.style;
 }
 
+/**
+ * 将item依次放入行中
+ * @param items
+ * @param elementStyle
+ * @param isAutoMainSize
+ * @param mainSize
+ * @param crossSize
+ */
+function putInLines(items, elementStyle, isAutoMainSize, mainSize, crossSize) {
+  let flexLine = [];
+  let flexLines = [flexLine];
+
+  let mainSpace = elementStyle[mainSize];
+  let crossSpace = 0;
+
+  for (let i = 0; i < items.length; i++) {
+    let item = items[i];
+    let itemStyle = getStyle(item);
+
+    if (itemStyle[mainSize] === null || itemStyle[mainSize] === undefined) {
+      itemStyle[mainSize] = 0;
+    }
+
+    if (itemStyle.flex) {
+      flexLine.push(item);
+      if (itemStyle[crossSize] !== null && itemStyle[crossSize] !== undefined) {
+        crossSpace = Math.max(crossSpace, itemStyle[crossSize]);
+      }
+    }
+    else if (elementStyle.flexWrap === 'nowrap' || isAutoMainSize) { // 这里因为没法判断100%的宽度，所以用或
+      mainSpace -= itemStyle[mainSize];
+      flexLine.push(item);
+      if (itemStyle[crossSize] !== null && itemStyle[crossSize] !== undefined) {
+        crossSpace = Math.max(crossSpace, itemStyle[crossSize]);
+      }
+    }
+    else {
+      if (itemStyle[mainSize] > elementStyle[mainSize]) {
+        itemStyle[mainSize] = elementStyle[mainSize];
+      }
+      if (mainSpace < itemStyle[mainSize]) {
+        flexLine.mainSpace = mainSpace;
+        flexLine.crossSpace = crossSpace;
+
+        flexLine = [];
+        flexLines.push(flexLine);
+
+        flexLine.push(item);
+
+        mainSpace = elementStyle[mainSize];
+        crossSpace = 0;
+      } else {
+        flexLine.push(item);
+      }
+      mainSpace -= itemStyle[mainSize];
+      if (itemStyle[crossSize] !== null && itemStyle[crossSize] !== undefined) {
+        crossSpace = Math.max(crossSpace, itemStyle[crossSize]);
+      }
+    }
+  }
+  flexLine.mainSpace = mainSpace;
+
+  if (elementStyle.flexWrap === 'nowrap' || isAutoMainSize) {
+    flexLine.crossSpace = (elementStyle[crossSize] !== undefined) ? elementStyle[crossSize] : crossSpace;
+  } else {
+    flexLine.crossSpace = crossSpace;
+  }
+
+  // mainSpace 最后一行的剩余主轴大小
+  return { flexLines, mainSpace };
+}
+
 function layout(element) {
   if (!element.computedStyle)
     return;
 
+  // 0 初始化
   let elementStyle = getStyle(element);
 
   if (elementStyle.display !== 'flex')
@@ -125,7 +198,7 @@ function layout(element) {
     crossSign = 1;
   }
 
-  // 主轴大小
+  // 1 外部容器主轴大小
   let isAutoMainSize = false;
   if (!style[mainSize]) {
     elementStyle[mainSize] = 0;
@@ -138,65 +211,10 @@ function layout(element) {
     isAutoMainSize = true;
   }
 
-  let flexLine = [];
-  let flexLines = [flexLine];
+  // 2 将item按行依次放入
+  const { flexLines, mainSpace } = putInLines(items, elementStyle, isAutoMainSize, mainSize, crossSize);
 
-  let mainSpace = elementStyle[mainSize];
-  let crossSpace = 0;
-
-  for (let i = 0; i < items.length; i++) {
-    let item = items[i];
-    let itemStyle = getStyle(item);
-
-    if (itemStyle[mainSize] === null || itemStyle[mainSize] === undefined) {
-      itemStyle[mainSize] = 0;
-    }
-
-    if (itemStyle.flex) {
-      flexLine.push(item);
-      if (itemStyle[crossSize] !== null && itemStyle[crossSize] !== undefined) {
-        crossSpace = Math.max(crossSpace, itemStyle[crossSize]);
-      }
-    }
-    else if (style.flexWrap === 'nowrap' && isAutoMainSize) {
-      mainSpace -= itemStyle[mainSize];
-      flexLine.push(item);
-      if (itemStyle[crossSize] !== null && itemStyle[crossSize] !== undefined) {
-        crossSpace = Math.max(crossSpace, itemStyle[crossSize]);
-      }
-    }
-    else {
-      if (itemStyle[mainSize] > style[mainSize]) {
-        itemStyle[mainSize] = style[mainSize];
-      }
-      if (mainSpace < itemStyle[mainSize]) {
-        flexLine.mainSpace = mainSpace;
-        flexLine.crossSpace = crossSpace;
-
-        flexLine = [];
-        flexLines.push(flexLine);
-
-        flexLine.push(item);
-
-        mainSpace = style[mainSize];
-        crossSpace = 0;
-      } else {
-        flexLine.push(item);
-      }
-      mainSpace -= itemStyle[mainSize];
-      if (itemStyle[crossSize] !== null && itemStyle[crossSize] !== undefined) {
-        crossSpace = Math.max(crossSpace, itemStyle[crossSize]);
-      }
-    }
-  }
-  flexLine.mainSpace = mainSpace;
-
-  if (style.flexWrap === 'nowrap' || isAutoMainSize) {
-    flexLine.crossSpace = (style[crossSize] !== undefined) ? style[crossSize] : crossSpace;
-  } else {
-    flexLine.crossSpace = crossSpace;
-  }
-
+  // 3 确定主轴大小
   if (mainSpace < 0) {
     // overflow (happens only if container is single line), scale every item
     let scale = style[mainSize] / (style[mainSize] - mainSpace);
@@ -277,7 +295,7 @@ function layout(element) {
     });
   }
 
-  // compute the cross axis sizes
+  // 4 确定纵轴大小
   // align-items, align-self
   let restCrossSpace = 0;
   if (!style[crossSize]) {  // auto sizing
@@ -367,4 +385,7 @@ function layout(element) {
   // console.log(flexLines);
 }
 
-module.exports = layout;
+module.exports = {
+  putInLines,
+  layout
+};
