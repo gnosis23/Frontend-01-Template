@@ -252,13 +252,13 @@ class Parser {
       this.top.notAttributes.push({
         name: ident.text,
         operator,
-        operand: operand ? operand.text : null
+        operand: operand ? operand.text.substring(1, operand.text.length - 1) : null
       });
     } else {
       this.top.attributes.push({
         name: ident.text,
         operator,
-        operand: operand ? operand.text : null
+        operand: operand ? operand.text.substring(1, operand.text.length - 1) : null
       });
     }
   }
