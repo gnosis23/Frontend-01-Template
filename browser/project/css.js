@@ -107,7 +107,7 @@ function match(element, selector) {
       const elementAttr = getAttribute(element, selectorAttr.name);
 
       if (!elementAttr) return false;
-      if (selector.operator) {
+      if (selectorAttr.operator) {
         // todo: 这里先只考虑=号
         if (selectorAttr.operand !== elementAttr.value)
           return false;

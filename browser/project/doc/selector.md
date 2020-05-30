@@ -81,7 +81,7 @@ declare type Selector = {
     ids: String[];          // id名 
     classes: String[];      // class名
     attributes: Object[];   // 属性名，{ name, operator, operand }
-    notTagNames: String[];   // 非标签名
+    notTagNames: String[];  // 非标签名
     notIds: String[];       // 非id
     notClasses: String[];   // 非class
     notAttributes: Object[];// 非属性名
