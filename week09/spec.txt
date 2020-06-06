@@ -1,14 +1,17 @@
-CSS  Inline  Layout  Module  Level 3
+CSS Inline Layout Module Level 3
 https://www.w3.org/TR/2020/WD-css-inline-3-20200604/
+"dominant-baseline,vertical-align,baseline-source,alignment-baseline,baseline-shift,line-height,line-sizing,leading-trim-over,leading-trim-under,leading-trim,inline-sizing,initial-letter,initial-letter-align,initial-letter-wrap"
 
-Media  Queries  Level 5
+Media Queries Level 5
 https://www.w3.org/TR/2020/WD-mediaqueries-5-20200603/
 
-CSS  Overflow  Module  Level 3
+CSS Overflow Module Level 3
 https://www.w3.org/TR/2020/WD-css-overflow-3-20200603/
+"overflow-x,overflow-y,overflow,overflow-clip-margin,overflow-inline,overflow-block,text-overflow,block-ellipsis,line-clamp,max-lines,continue"
 
-CSS  Containment  Module  Level 2
+CSS Containment Module Level 2
 https://www.w3.org/TR/2020/WD-css-contain-2-20200603/
+contain,content-visibility
 
 Requirements for Chinese Text Layout中文排版需求
 https://www.w3.org/TR/2020/WD-clreq-20200601/
@@ -16,50 +19,61 @@ https://www.w3.org/TR/2020/WD-clreq-20200601/
 Ethiopic Layout Requirements
 https://www.w3.org/TR/2020/WD-elreq-20200526/
 
-CSS  Box  Sizing  Module  Level 4
+CSS Box Sizing Module Level 4
 https://www.w3.org/TR/2020/WD-css-sizing-4-20200526/
+"aspect-ratio,contain-intrinsic-size"
 
-CSS  Positioned  Layout  Module  Level 3
+CSS Positioned Layout Module Level 3
 https://www.w3.org/TR/2020/WD-css-position-3-20200519/
+position,top,right,bottom,left,inset-block-start,inset-inline-start,inset-block-end,inset-inline-end,inset-block,inset-inline,inset
 
-CSS  Display  Module  Level 3
+CSS Display Module Level 3
 https://www.w3.org/TR/2020/CR-css-display-3-20200519/
+display
 
-CSS  Text  Decoration  Module  Level 4
+CSS Text Decoration Module Level 4
 https://www.w3.org/TR/2020/WD-css-text-decor-4-20200506/
+"text-decoration-line,text-decoration-style,text-decoration-color,text-decoration-thickness,text-decoration,text-underline-position,text-underline-offset,text-decoration-skip,text-decoration-skip-self,text-decoration-skip-box,text-decoration-skip-inset,text-decoration-skip-spaces,text-decoration-skip-ink,text-emphasis-style,text-emphasis-color,text-emphasis,text-emphasis-position,text-emphasis-skip,text-shadow"
 
-CSS  Ruby  Layout  Module  Level 1
+CSS Ruby Layout Module Level 1
 https://www.w3.org/TR/2020/WD-css-ruby-1-20200429/
+ruby-position,ruby-merge,ruby-align,ruby-overhang
 
-CSS  Text  Module  Level 3
+CSS Text Module Level 3
 https://www.w3.org/TR/2020/WD-css-text-3-20200429/
+"text-transform,white-space,tab-size,word-break,line-break,hyphens,overflow-wrap,word-wrap,text-align,text-align-all,text-align-last,text-justify,word-spacing,letter-spacing,text-indent,hanging-punctuation"
 
-CSS  Box  Model  Module  Level 3
+CSS Box Model Module Level 3
 https://www.w3.org/TR/2020/WD-css-box-3-20200421/
+margin-top,margin-right,margin-bottom,margin-left,margin,padding-top,padding-right,padding-bottom,padding-left,padding
 
-CSS  Box  Model  Module  Level 4
+CSS Box Model Module Level 4
 https://www.w3.org/TR/2020/WD-css-box-4-20200421/
 
-CSS  Box  Alignment  Module  Level 3
+CSS Box Alignment Module Level 3
 https://www.w3.org/TR/2020/WD-css-align-3-20200421/
+"align-content,justify-content,place-content,justify-self,align-self,place-self,justify-items,align-items,place-items,row-gap,column-gap,gap"
 
-CSS  Color  Adjustment  Module  Level 1
+CSS Color Adjustment Module Level 1
 https://www.w3.org/TR/2020/WD-css-color-adjust-1-20200402/
+color-scheme,forced-color-adjust,color-adjust
 
 CSS Speech Module
 https://www.w3.org/TR/2020/CR-css-speech-1-20200310/
 
-CSS  Conditional  Rules  Module  Level 4
+CSS Conditional Rules Module Level 4
 https://www.w3.org/TR/2020/WD-css-conditional-4-20200303/
 
-CSS  Transforms  Module  Level 2
+CSS Transforms Module Level 2
 https://www.w3.org/TR/2020/WD-css-transforms-2-20200303/
+translate,rotate,scale,transform-style,perspective,perspective-origin,backface-visibility
 
-CSS  Color  Module  Level 5
+CSS Color Module Level 5
 https://www.w3.org/TR/2020/WD-css-color-5-20200303/
 
-CSS  Scroll  Anchoring  Module  Level 1
+CSS Scroll Anchoring Module Level 1
 https://www.w3.org/TR/2020/WD-css-scroll-anchoring-1-20200211/
+overflow-anchor
 
 Resize Observer
 https://www.w3.org/TR/2020/WD-resize-observer-1-20200211/
@@ -67,115 +81,134 @@ https://www.w3.org/TR/2020/WD-resize-observer-1-20200211/
 Timed Text Markup Language 2 (TTML2) (2nd Edition)
 https://www.w3.org/TR/2020/CR-ttml2-20200128/
 
-CSS  Basic  User  Interface  Module  Level 4
+CSS Basic User Interface Module Level 4
 https://www.w3.org/TR/2020/WD-css-ui-4-20200124/
+"outline,outline-width,outline-style,outline-color,outline-offset,resize,cursor,caret-color,caret-shape,caret,nav-up,nav-right,nav-down,nav-left,user-select,appearance"
 
-CSS  Writing  Modes  Level 3
+CSS Writing Modes Level 3
 https://www.w3.org/TR/2019/REC-css-writing-modes-3-20191210/
+"direction,unicode-bidi,writing-mode,text-orientation,glyph-orientation-vertical,text-combine-upright"
 
-CSS  Grid  Layout  Module  Level 2
+CSS Grid Layout Module Level 2
 https://www.w3.org/TR/2019/WD-css-grid-2-20191203/
 
-CSS  Spatial  Navigation  Level 1
+CSS Spatial Navigation Level 1
 https://www.w3.org/TR/2019/WD-css-nav-1-20191126/
+spatial-navigation-contain,spatial-navigation-action,spatial-navigation-function
 
-CSS  Containment  Module  Level 1
+CSS Containment Module Level 1
 https://www.w3.org/TR/2019/REC-css-contain-1-20191121/
 
-CSS  Text  Module  Level 4
+CSS Text Module Level 4
 https://www.w3.org/TR/2019/WD-css-text-4-20191113/
+word-boundary-detection,word-boundary-expansion,text-space-collapse,text-space-trim,text-wrap,wrap-before,wrap-after,wrap-inside,white-space,hyphenate-character,hyphenate-limit-zone,hyphenate-limit-chars,hyphenate-limit-lines,hyphenate-limit-last,text-group-align,line-padding,text-spacing
 
-CSS  Fonts  Module  Level 4
+CSS Fonts Module Level 4
 https://www.w3.org/TR/2019/WD-css-fonts-4-20191113/
+font-family,font-weight,font-stretch,font-style,font-size,font-size-adjust,font,font-synthesis-weight,font-synthesis-style,font-synthesis-small-caps,font-synthesis,font-kerning,font-variant-ligatures,font-variant-position,font-variant-caps,font-variant-numeric,font-variant-alternates,font-variant-east-asian,font-variant,font-feature-settings,font-language-override,font-optical-sizing,font-variation-settings,font-palette,font-variant-emoji
 
-CSS  Color  Module  Level 4
+CSS Color Module Level 4
 https://www.w3.org/TR/2019/WD-css-color-4-20191105/
+color,opacity
 
-CSS  Properties  and  Values  API  Level 1
+CSS Properties and Values API Level 1
 https://www.w3.org/TR/2019/WD-css-properties-values-api-1-20191025/
 
-CSS  Multi-column  Layout  Module  Level 1
+CSS Multi-column Layout Module Level 1
 https://www.w3.org/TR/2019/WD-css-multicol-1-20191015/
+"column-width,column-count,columns,column-rule-color,column-rule-style,column-rule-width,column-rule,column-span,column-fill"
 
-CSS  Images  Module  Level 3
+CSS Images Module Level 3
 https://www.w3.org/TR/2019/CR-css-images-3-20191010/
+object-fit,object-position,image-orientation,image-rendering
 
-CSS  Lists  Module  Level 3
+CSS Lists Module Level 3
 https://www.w3.org/TR/2019/WD-css-lists-3-20190817/
+list-style-image,list-style-type,list-style-position,list-style,marker-side,counter-reset,counter-increment,counter-set
 
-CSS  Text  Decoration  Module  Level 3
+CSS Text Decoration Module Level 3
 https://www.w3.org/TR/2019/CR-css-text-decor-3-20190813/
+"text-decoration-line,text-decoration-style,text-decoration-color,text-decoration,text-underline-position,text-emphasis-style,text-emphasis-color,text-emphasis,text-emphasis-position,text-shadow"
 
-CSS  Generated  Content  Module  Level 3
+CSS Generated Content Module Level 3
 https://www.w3.org/TR/2019/WD-css-content-3-20190802/
 
-CSS  Writing  Modes  Level 4
+CSS Writing Modes Level 4
 https://www.w3.org/TR/2019/CR-css-writing-modes-4-20190730/
+"direction,unicode-bidi,writing-mode,text-orientation,glyph-orientation-vertical,text-combine-upright"
 
-CSS  Table  Module  Level 3
+CSS Table Module Level 3
 https://www.w3.org/TR/2019/WD-css-tables-3-20190727/
 
-CSS  Syntax  Module  Level 3
+CSS Syntax Module Level 3
 https://www.w3.org/TR/2019/CR-css-syntax-3-20190716/
 
 CSS Animation Worklet API
 https://www.w3.org/TR/2019/WD-css-animation-worklet-1-20190625/
 
-CSS  Overscroll  Behavior  Module  Level 1
+CSS Overscroll Behavior Module Level 1
 https://www.w3.org/TR/2019/WD-css-overscroll-1-20190606/
+"overscroll-behavior,overscroll-behavior-x,overscroll-behavior-y,overscroll-behavior-inline,overscroll-behavior-block"
 
-CSS  Values  and  Units  Module  Level 3
+CSS Values and Units Module Level 3
 https://www.w3.org/TR/2019/CR-css-values-3-20190606/
 
-CSS  Intrinsic  &  Extrinsic  Sizing  Module  Level 3
+CSS Intrinsic & Extrinsic Sizing Module Level 3
 https://www.w3.org/TR/2019/WD-css-sizing-3-20190522/
+width,height,min-width,min-height,max-width,max-height,box-sizing
 
-CSS  Easing  Functions  Level 1
+CSS Easing Functions Level 1
 https://www.w3.org/TR/2019/CR-css-easing-1-20190430/
 
 WebVTT: The Web Video Text Tracks Format
 https://www.w3.org/TR/2019/CR-webvtt1-20190404/
 
-CSS  Scroll  Snap  Module  Level 1
+CSS Scroll Snap Module Level 1
 https://www.w3.org/TR/2019/CR-css-scroll-snap-1-20190319/
+"scroll-snap-type,scroll-padding,scroll-margin,scroll-snap-align,scroll-snap-stop,scroll-padding-top,scroll-padding-right,scroll-padding-bottom,scroll-padding-left,scroll-padding-inline-start,scroll-padding-block-start,scroll-padding-inline-end,scroll-padding-block-end,scroll-padding-block,scroll-padding-inline,scroll-margin-top,scroll-margin-right,scroll-margin-bottom,scroll-margin-left,scroll-margin-block-start,scroll-margin-inline-start,scroll-margin-block-end,scroll-margin-inline-end,scroll-margin-block,scroll-margin-inline"
 
-CSS  Pseudo-Elements  Module  Level 4
+CSS Pseudo-Elements Module Level 4
 https://www.w3.org/TR/2019/WD-css-pseudo-4-20190225/
 
-CSS  Transforms  Module  Level 1
+CSS Transforms Module Level 1
 https://www.w3.org/TR/2019/CR-css-transforms-1-20190214/
+"transform,transform-origin,transform-box"
 
-CSS  Values  and  Units  Module  Level 4
+CSS Values and Units Module Level 4
 https://www.w3.org/TR/2019/WD-css-values-4-20190131/
 
-Motion  Path  Module  Level 1
+Motion Path Module Level 1
 https://www.w3.org/TR/2018/WD-motion-1-20181218/
+"offset-path,offset-distance,offset-position,offset-anchor,offset-rotate,offset"
 
-Filter  Effects  Module  Level 1
+Filter Effects Module Level 1
 https://www.w3.org/TR/2018/WD-filter-effects-1-20181218/
+filter,flood-color,flood-opacity,color-interpolation-filters,lighting-color
 
-CSS  Fragmentation  Module  Level 4
+CSS Fragmentation Module Level 4
 https://www.w3.org/TR/2018/WD-css-break-4-20181218/
+break-before,break-after,break-inside,orphans,widows,margin-break,box-decoration-break
 
-Geometry  Interfaces  Module  Level 1
+Geometry Interfaces Module Level 1
 https://www.w3.org/TR/2018/CR-geometry-1-20181204/
 
-CSS  Fragmentation  Module  Level 3
+CSS Fragmentation Module Level 3
 https://www.w3.org/TR/2018/CR-css-break-3-20181204/
 
-Selectors  Level 4
+Selectors Level 4
 https://www.w3.org/TR/2018/WD-selectors-4-20181121/
 
-CSS  Flexible  Box  Layout  Module  Level 1
+CSS Flexible Box Layout Module Level 1
 https://www.w3.org/TR/2018/CR-css-flexbox-1-20181119/
+flex-direction,flex-wrap,flex-flow,order,flex,flex-grow,flex-shrink,flex-basis,justify-content,align-items,align-self,align-content
 
 CSS Shadow Parts
 https://www.w3.org/TR/2018/WD-css-shadow-parts-1-20181115/
 
-Selectors  Level 3
+Selectors Level 3
 https://www.w3.org/TR/2018/REC-selectors-3-20181106/
 
-CSS  Paged  Media  Module  Level 3
+CSS Paged Media Module Level 3
 https://www.w3.org/TR/2018/WD-css-page-3-20181018/
 
 Web Animations
@@ -183,74 +216,84 @@ https://www.w3.org/TR/2018/WD-web-animations-1-20181011/
 
 CSS Transitions
 https://www.w3.org/TR/2018/WD-css-transitions-1-20181011/
+"transition-property,transition-duration,transition-timing-function,transition-delay,transition"
 
-CSS  Animations  Level 1
+CSS Animations Level 1
 https://www.w3.org/TR/2018/WD-css-animations-1-20181011/
+"animation-name,animation-duration,animation-timing-function,animation-iteration-count,animation-direction,animation-play-state,animation-delay,animation-fill-mode,animation"
 
-CSS  Scrollbars  Module  Level 1
+CSS Scrollbars Module Level 1
 https://www.w3.org/TR/2018/WD-css-scrollbars-1-20180925/
+scrollbar-color,scrollbar-width
 
-CSS  Fonts  Module  Level 3
+CSS Fonts Module Level 3
 https://www.w3.org/TR/2018/REC-css-fonts-3-20180920/
 
-CSS  Cascading  and  Inheritance  Level 3
+CSS Cascading and Inheritance Level 3
 https://www.w3.org/TR/2018/CR-css-cascade-3-20180828/
 
-CSS  Cascading  and  Inheritance  Level 4
+CSS Cascading and Inheritance Level 4
 https://www.w3.org/TR/2018/CR-css-cascade-4-20180828/
 
-CSS  Logical  Properties  and  Values  Level 1
+CSS Logical Properties and Values Level 1
 https://www.w3.org/TR/2018/WD-css-logical-1-20180827/
 
-CSS  Painting  API  Level 1
+CSS Painting API Level 1
 https://www.w3.org/TR/2018/CR-css-paint-api-1-20180809/
 
 CSS Basic User Interface Module Level 3 (CSS3 UI)
 https://www.w3.org/TR/2018/REC-css-ui-3-20180621/
+"box-sizing,outline,outline-width,outline-style,outline-color,outline-offset,resize,text-overflow,cursor,caret-color"
 
-CSS  Color  Module  Level 3
+CSS Color Module Level 3
 https://www.w3.org/TR/2018/REC-css-color-3-20180619/
 
-CSS  Layout  API  Level 1
+CSS Layout API Level 1
 https://www.w3.org/TR/2018/WD-css-layout-api-1-20180412/
 
-CSS  Typed  OM  Level 1
+CSS Typed OM Level 1
 https://www.w3.org/TR/2018/WD-css-typed-om-1-20180410/
 
-CSS  Grid  Layout  Module  Level 1
+CSS Grid Layout Module Level 1
 https://www.w3.org/TR/2017/CR-css-grid-1-20171214/
+"grid-template-columns,grid-template-rows,grid-template-areas,grid-template,grid-auto-columns,grid-auto-rows,grid-auto-flow,grid,grid-row-start,grid-column-start,grid-row-end,grid-column-end,grid-row,grid-column,grid-area"
 
-CSS  Counter  Styles  Level 3
+CSS Counter Styles Level 3
 https://www.w3.org/TR/2017/CR-css-counter-styles-3-20171214/
 
-CSS  Backgrounds  and  Borders  Module  Level 3
+CSS Backgrounds and Borders Module Level 3
 https://www.w3.org/TR/2017/CR-css-backgrounds-3-20171017/
+background-color,background-image,background-repeat,background-attachment,background-position,background-clip,background-origin,background-size,background,border-top-color,border-right-color,border-bottom-color,border-left-color,border-color,border-top-style,border-right-style,border-bottom-style,border-left-style,border-style,border-top-width,border-right-width,border-bottom-width,border-left-width,border-width,border-top,border-right,border-bottom,border-left,border,border-top-left-radius,border-top-right-radius,border-bottom-right-radius,border-bottom-left-radius,border-radius,border-image-source,border-image-slice,border-image-width,border-image-outset,border-image-repeat,border-image,box-shadow
 
-Media  Queries  Level 4
+Media Queries Level 4
 https://www.w3.org/TR/2017/CR-mediaqueries-4-20170905/
 
-CSS  Overflow  Module  Level 4
+CSS Overflow Module Level 4
 https://www.w3.org/TR/2017/WD-css-overflow-4-20170613/
 
-CSS  Image  Values  and  Replaced  Content  Module  Level 4
+CSS Image Values and Replaced Content Module Level 4
 https://www.w3.org/TR/2017/WD-css-images-4-20170413/
+"image-resolution"
 
-CSS  Fill  and  Stroke  Module  Level 3
+CSS Fill and Stroke Module Level 3
 https://www.w3.org/TR/2017/WD-fill-stroke-3-20170413/
+"fill-rule,fill-break,fill-color,fill-image,fill-origin,fill-position,fill-size,fill-repeat,fill,fill-opacity,stroke-width,stroke-align,stroke-linecap,stroke-linejoin,stroke-miterlimit,stroke-break,stroke-dasharray,stroke-dashoffset,stroke-dash-corner,stroke-dash-justify,stroke-color,stroke-image,stroke-origin,stroke-position,stroke-size,stroke-repeat,stroke,stroke-opacity"
 
 CSS Rhythmic Sizing
 https://www.w3.org/TR/2017/WD-css-rhythm-1-20170302/
+"line-height-step,block-step-size,block-step-insert,block-step-align,block-step-round,block-step"
 
-CSS  Round  Display  Level 1
+CSS Round Display Level 1
 https://www.w3.org/TR/2016/WD-css-round-display-1-20161222/
+shape-inside,border-boundary
 
-Worklets  Level 1
+Worklets Level 1
 http://www.w3.org/TR/2016/WD-worklets-1-20160607/
 
 Cascading Style Sheets Level 2 Revision 2 (CSS 2.2) Specification
 http://www.w3.org/TR/2016/WD-CSS22-20160412/
 
-CSS  Device  Adaptation  Module  Level 1
+CSS Device Adaptation Module Level 1
 http://www.w3.org/TR/2016/WD-css-device-adapt-1-20160329/
 
 CSS Object Model (CSSOM)
@@ -259,34 +302,42 @@ http://www.w3.org/TR/2016/WD-cssom-1-20160317/
 CSSOM View Module
 http://www.w3.org/TR/2016/WD-cssom-view-1-20160317/
 
-CSS  Will  Change  Module  Level 1
+CSS Will Change Module Level 1
 http://www.w3.org/TR/2015/CR-css-will-change-1-20151203/
+will-change
 
-CSS  Custom  Properties  for  Cascading  Variables  Module  Level 1
+CSS Custom Properties for Cascading Variables Module Level 1
 http://www.w3.org/TR/2015/CR-css-variables-1-20151203/
 
 CSS Page Floats
 http://www.w3.org/TR/2015/WD-css-page-floats-3-20150915/
+float-reference,float,clear,float-defer,float-offset
 
 Priorities for CSS from the Digital Publishing Interest Group
 http://www.w3.org/TR/2015/WD-dpub-css-priorities-20150820/
+"hyphenate-patterns,min-length-of-last-line,merge-sequential-page-numbers"
 
-CSS  Exclusions  Module  Level 1
+CSS Exclusions Module Level 1
 http://www.w3.org/TR/2015/WD-css3-exclusions-20150115/
+"wrap-flow,wrap-through"
 
-Compositing  and  Blending  Level 1
+Compositing and Blending Level 1
 http://www.w3.org/TR/2015/CR-compositing-1-20150113/
+mix-blend-mode,isolation,background-blend-mode
 
-CSS  Regions  Module  Level 1
+CSS Regions Module Level 1
 http://www.w3.org/TR/2014/WD-css-regions-1-20141009/
+"flow-into,flow-from,break-before,break-after,break-inside,region-fragment"
 
-CSS  Line  Grid  Module  Level 1
+CSS Line Grid Module Level 1
 http://www.w3.org/TR/2014/WD-css-line-grid-1-20140916/
+"line-grid,line-snap,box-snap"
 
-CSS  Masking  Module  Level 1
+CSS Masking Module Level 1
 http://www.w3.org/TR/2014/CR-css-masking-1-20140826/
+clip-path,clip-rule,mask-image,mask-mode,mask-repeat,mask-position,mask-clip,mask-origin,mask-size,mask-composite,mask,mask-border-source,mask-border-mode,mask-border-slice,mask-border-width,mask-border-outset,mask-border-repeat,mask-border,mask-type,clip
 
-CSS  Font  Loading  Module  Level 3
+CSS Font Loading Module Level 3
 http://www.w3.org/TR/2014/WD-css-font-loading-3-20140522/
 
 CSS Generated Content for Paged Media Module
@@ -295,22 +346,22 @@ http://www.w3.org/TR/2014/WD-css-gcpm-3-20140513/
 SVG Integration
 http://www.w3.org/TR/2014/WD-svg-integration-20140417/
 
-CSS  Scoping  Module  Level 1
+CSS Scoping Module Level 1
 http://www.w3.org/TR/2014/WD-css-scoping-1-20140403/
 
-CSS  Shapes  Module  Level 1
+CSS Shapes Module Level 1
 http://www.w3.org/TR/2014/CR-css-shapes-1-20140320/
 
-CSS  Namespaces  Module  Level 3
+CSS Namespaces Module Level 3
 http://www.w3.org/TR/2014/REC-css-namespaces-3-20140320/
 
 CSS Style Attributes
 http://www.w3.org/TR/2013/REC-css-style-attr-20131107/
 
-CSS  Conditional  Rules  Module  Level 3
+CSS Conditional Rules Module Level 3
 http://www.w3.org/TR/2013/CR-css3-conditional-20130404/
 
-Selectors  API  Level 1
+Selectors API Level 1
 http://www.w3.org/TR/2013/REC-selectors-api-20130221/
 
 Media Queries
