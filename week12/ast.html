@@ -1,0 +1,38 @@
+
+<script>
+  var regex = /([0-9.]+)|([ ]+)|([\r\n])|(\+)|(-)|(\*)|(\/)/g
+
+  var dictionary = ["Number", "Whitespace", "LineTerminator", "+", "-", "*", "/"];
+
+  function* tokenize(source) {
+    var result = null;
+    var lastIndex = 0;
+
+    do {
+      // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp/exec
+      // 匹配到source的位置, regex需要有g/y
+      lastIndex = regex.lastIndex;
+      // result中如果匹配，[0], [1], [2] 按顺序
+      result = regex.exec(source);
+      if (!result) break;
+
+      let token = {
+        type: null,
+        value: null
+      };
+
+      for (var i = 0; i < dictionary.length; i++) {
+        if (result[i + 1])
+          token.type = dictionary[i];
+      }
+
+      token.value = result[0];
+
+      yield token;
+    } while(result);
+  }
+
+  for (let token of tokenize("1024   +  10 * 25 / 40")) {
+    console.log(token);
+  }
+</script>
