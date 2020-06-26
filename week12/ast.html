@@ -16,6 +16,11 @@
       result = regex.exec(source);
       if (!result) break;
 
+      if (regex.lastIndex - lastIndex !== result[0].length) {
+        console.log(result);
+        throw new Error(`unexpected token "${source.substring(lastIndex, regex.lastIndex)}"`);
+      }
+
       let token = {
         type: null,
         value: null
@@ -30,6 +35,8 @@
 
       yield token;
     } while(result);
+
+    yield { type: "EOF" };
   }
 
   for (let token of tokenize("1024   +  10 * 25 / 40")) {
