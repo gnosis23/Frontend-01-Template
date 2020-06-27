@@ -1,8 +1,6 @@
-
 <script>
-  var regex = /([0-9.]+)|([ ]+)|([\r\n])|(\+)|(-)|(\*)|(\/)/g
-
-  var dictionary = ["Number", "Whitespace", "LineTerminator", "+", "-", "*", "/"];
+  var regex = /([0-9.]+)|([ ]+)|([\r\n])|(\+)|(-)|(\*)|(\/)|(\()|(\))/g
+  var dictionary = ["Number", "Whitespace", "LineTerminator", "+", "-", "*", "/", "(", ")"];
 
   function* tokenize(source) {
     var result = null;
@@ -34,33 +32,48 @@
       token.value = result[0];
 
       yield token;
-    } while(result);
+    } while (result);
 
-    yield { type: "EOF" };
+    yield {type: "EOF"};
   }
 
-  const makeExp = children => ({ type: 'Expression', children });
-  const makeAddExp = children => ({ type: 'AdditiveExpression', children });
+  const makeStart = children => ({type: 'Start', children});
+  const makeExp = children => ({type: 'Expression', children});
+  const makeAddExp = children => ({type: 'AdditiveExpression', children});
+  const makeMulExp = children => ({type: 'MultiplicativeExpression', children});
+  const makePrimaryExp = children => ({type: 'PrimaryExpression', children});
 
-  function Expression(tokens) {
-    AdditiveExpression(tokens);
-    if (source[0].type === 'AdditiveExpression' && source[1].type === 'EOF') {
-      const node = makeExp([source.shift(), source.shift()]);
+  function Start(source) {
+    Expression(source);
+    if (source[0].type === 'Expression' && source[1].type === 'EOF') {
+      const node = makeStart([source.shift(), source.shift()]);
       source.unshift(node);
       return source[0];
     }
-    return tokens[0];
+    throw new Error('Start');
+  }
+
+  function Expression(tokens) {
+    AdditiveExpression(tokens);
+    if (source[0].type === 'AdditiveExpression') {
+      const node = makeExp([source.shift()]);
+      source.unshift(node);
+      return source[0];
+    }
+    throw new Error('Expression');
   }
 
   function AdditiveExpression(source) {
-    if (source[0].type === 'Number') {
+    if (source[0].type !== 'MultiplicativeExpression' && source[0].type !== 'AdditiveExpression') {
       MultiplicativeExpression(source);
     }
+
     if (source[0].type === 'MultiplicativeExpression') {
       MultiplicativeExpression(source);
       const node = makeAddExp(source.shift());
       source.unshift(node);
     }
+
     if (
       source[0].type === 'AdditiveExpression'
       && source.length > 2
@@ -72,6 +85,7 @@
       source.unshift(node);
       return AdditiveExpression(source);
     }
+
     if (
       source[0].type === 'AdditiveExpression'
       && source.length > 2
@@ -91,37 +105,37 @@
   }
 
   function MultiplicativeExpression(source) {
-    if (source[0].type === 'Number') {
-      let node = {
-        type: 'MultiplicativeExpression',
-        children: source.shift()
-      };
-      source.unshift(node);
-      return MultiplicativeExpression(source);
+    if (source[0].type !== 'MultiplicativeExpression') {
+      PrimaryExpression(source);
     }
+
+    if (source[0].type === 'PrimaryExpression') {
+      let node = makeMulExp(source.shift());
+      source.unshift(node);
+    }
+
     if (
       source[0].type === 'MultiplicativeExpression'
-      && source.length > 2
+      && source.length > 1
       && source[1].type === '*'
-      && source[2].type === 'Number'
     ) {
-      let node = {
-        type: 'MultiplicativeExpression',
-        children: [source.shift(), source.shift(), source.shift()]
-      };
+      let node = makeMulExp([source.shift(), source.shift()])
+      PrimaryExpression(source);
+
+      node.children.push(source.shift());
       source.unshift(node);
       return MultiplicativeExpression(source);
     }
+
     if (
       source[0].type === 'MultiplicativeExpression'
-      && source.length > 2
+      && source.length > 1
       && source[1].type === '/'
-      && source[2].type === 'Number'
     ) {
-      let node = {
-        type: 'MultiplicativeExpression',
-        children: [source.shift(), source.shift(), source.shift()]
-      };
+      let node = makeMulExp([source.shift(), source.shift()]);
+      PrimaryExpression(source);
+
+      node.children.push(source.shift());
       source.unshift(node);
       return MultiplicativeExpression(source);
     }
@@ -132,12 +146,36 @@
     throw new Error('MultiplicativeExpression');
   }
 
+  function PrimaryExpression(source) {
+    if (source[0].type === 'Number') {
+      const node = makePrimaryExp(source.shift());
+      source.unshift(node);
+      return;
+    }
+
+    if (source[0].type === '(') {
+      source.shift();
+      Expression(source);
+      const node = source.shift();
+      if (source[0].type === ')') {
+        source.shift();
+      } else {
+        throw new Error('not match parentheses');
+      }
+      source.unshift(makePrimaryExp(node));
+      return;
+    }
+
+    console.error(source);
+    throw new Error('Primary Expression');
+  }
+
   let source = [];
 
-  for (let token of tokenize("1024   +  10 * 25 / 40")) {
+  for (let token of tokenize("(1024   +  10) * (25 / 40)")) {
     if (token.type !== 'Whitespace')
       source.push(token);
   }
 
-  console.log(Expression(source));
+  console.log(Start(source));
 </script>
