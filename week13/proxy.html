@@ -1,0 +1,84 @@
+<label for="r">r</label><input id="r" type="range" min="0" max="255" />
+<label for="g">g</label><input id="g" type="range" min="0" max="255" />
+<label for="b">b</label><input id="b" type="range" min="0" max="255" />
+<div id="block" style="width:100px;height: 100px;"></div>
+
+<script>
+  let handlers = new Map();
+  let reactivies = new Map();
+  let usedReactivities = [];
+
+  function reactive(obj) {
+    if (reactivies.has(obj)) {
+      return reactivies.get(obj);
+    }
+    let proxy = new Proxy(obj, {
+      get(obj, prop) {
+        usedReactivities.push([obj, prop]);
+        if (typeof obj[prop] === 'object') {
+          return reactive(obj[prop]);
+        }
+        return obj[prop];
+      },
+      set(obj, prop, val) {
+        obj[prop] = val;
+        if (handlers.get(obj) && handlers.get(obj).get(prop)) {
+          for (let handler of handlers.get(obj).get(prop)) {
+            handler()
+          }
+        }
+        return obj[prop];
+      }
+    });
+
+    reactivies.set(obj, proxy);
+
+    return proxy;
+  }
+
+  function effect(callback) {
+    usedReactivities = [];
+    callback();
+    for (let usedReactivity of usedReactivities) {
+      let [obj, prop] = usedReactivity;
+      console.log(obj, prop);
+      if (!handlers.get(obj)) {
+        handlers.set(obj, new Map());
+      }
+
+      if (!handlers.get(obj).has(prop)) {
+        handlers.get(obj).set(prop, []);
+      }
+
+      handlers.get(obj).get(prop).push(callback);
+    }
+  }
+
+  let r = reactive({ r: 100 });
+  let g = reactive({ r: 100 });
+  let b = reactive({ r: 100 });
+  effect(() => {
+    document.getElementById('r').value = r.r;
+  });
+  document.getElementById('r').addEventListener('input', event => {
+    r.r = event.target.value;
+  });
+
+  effect(() => {
+    document.getElementById('g').value = g.r;
+  });
+  document.getElementById('g').addEventListener('input', event => {
+    g.r = event.target.value;
+  });
+
+  effect(() => {
+    document.getElementById('b').value = b.r;
+  });
+  document.getElementById('b').addEventListener('input', event => {
+    b.r = event.target.value;
+  });
+
+  effect(() => {
+    document.getElementById('block').style = `width:100px;height:100px;background:rgb(${r.r},${g.r},${b.r})`
+  });
+</script>
