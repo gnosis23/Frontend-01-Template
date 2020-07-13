@@ -1,3 +1,4 @@
 # 本周作业
 
-- [组件](../Component)
+- [JSX组件](../Component)
+- [轮播组件](./x.html)

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>carousel component</title>
+  <style>
+    .carousel {
+      width: 500px;
+      height: 300px;
+      margin-left: 100px;
+      white-space: nowrap;
+      outline: solid 1px blue;
+      zoom: 0.5
+      /* overflow: hidden; */
+    }
+    .carousel img {
+      width: 100%;
+      height: 100%;
+      display: inline-block;
+    }
+  </style>
+</head>
+
+<body>
+<div id="container"></div>
+
+<script>
+  let data = [
+    "https://static001.geekbang.org/resource/image/bb/21/bb38fb7c1073eaee1755f81131f11d21.jpg",
+    "https://static001.geekbang.org/resource/image/1b/21/1b809d9a2bdf3ecc481322d7c9223c21.jpg",
+    "https://static001.geekbang.org/resource/image/b6/4f/b6d65b2f12646a9fd6b8cb2b020d754f.jpg",
+    "https://static001.geekbang.org/resource/image/73/e4/730ea9c393def7975deceb48b3eb6fe4.jpg",
+  ];
+
+  class Carousel {
+    constructor() {
+      this.root = null;
+      this.data = null;
+    }
+    render() {
+      this.root = document.createElement('div');
+      this.root.classList.add('carousel');
+
+      for (let d of data) {
+        let element = document.createElement('img');
+        element.src = d;
+        element.addEventListener('dragstart', e => e.preventDefault());
+        this.root.appendChild(element);
+      }
+
+      let position = 0;
+
+      let nextPic = () => {
+        let nextPosition = (position + 1) % this.data.length;
+
+        let current = this.root.childNodes[position];
+        let next = this.root.childNodes[nextPosition];
+
+        current.style.transition = 'ease 0s';
+        next.style.transition = 'ease 0s';
+
+        current.style.transform = `translateX(${- 100 * position}%)`;
+        next.style.transform = `translateX(${100 - 100 * nextPosition}%)`;
+
+        // requestAnimationFrame(() => {
+        //   requestAnimationFrame(() => {})
+        // })
+
+        setTimeout(() => {
+          current.style.transition = 'ease 0.5s';
+          next.style.transition = 'ease 0.5s';
+
+          current.style.transform = `translateX(${-100 - 100 * position}%)`;
+          next.style.transform = `translateX(${-100 * nextPosition}%)`;
+
+          position = nextPosition;
+        }, 16);
+
+        // setTimeout(nextPic, 3000);
+      };
+
+      // setTimeout(nextPic, 3000);
+
+      this.root.addEventListener("mousedown", event => {
+        let startX = event.clientX, startY = event.clientY;
+
+        let nextPosition = (position + 1) % this.data.length;
+        let lastPosition = (position - 1 + this.data.length) % this.data.length;
+        let current = this.root.childNodes[position];
+        let last = this.root.childNodes[lastPosition];
+        let next = this.root.childNodes[nextPosition];
+
+        current.style.transition = "ease 0s";
+        last.style.transition = "ease 0s";
+        next.style.transition = "ease 0s";
+
+        current.style.transform = `translateX(${- 500 * position}px)`;
+        last.style.transform = `translateX(${-500 - 500 * lastPosition}px)`;
+        next.style.transform = `translateX(${500 - 500 * nextPosition}px)`;
+
+        let move = event => {
+          current.style.transform = `translateX(${- 500 * position - startX + event.clientX}px)`;
+          last.style.transform = `translateX(${-500 - 500 * lastPosition - startX + event.clientX}px)`;
+          next.style.transform = `translateX(${500 - 500 * nextPosition - startX + event.clientX}px)`;
+        };
+
+        let up = event => {
+          document.removeEventListener("mousemove", move);
+          document.removeEventListener("mouseup", up);
+        };
+
+        document.addEventListener('mousemove', move);
+        document.addEventListener('mouseup', up);
+      });
+    }
+  }
+
+  // create
+  let carousel = new Carousel();
+
+  // update
+  carousel.data = data;
+  carousel.render();
+
+  // mount
+  document.getElementById('container').appendChild(carousel.root);
+
+</script>
+</body>
+
+</html>
