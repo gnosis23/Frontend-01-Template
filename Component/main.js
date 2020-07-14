@@ -1,101 +1,42 @@
-import "./foo";
+import { h, Text, Wrapper } from './createElement';
 
-function h(Tag, attributes, ...children) {
-    let o;
+let data = [
+    "https://static001.geekbang.org/resource/image/bb/21/bb38fb7c1073eaee1755f81131f11d21.jpg",
+    "https://static001.geekbang.org/resource/image/1b/21/1b809d9a2bdf3ecc481322d7c9223c21.jpg",
+    "https://static001.geekbang.org/resource/image/b6/4f/b6d65b2f12646a9fd6b8cb2b020d754f.jpg",
+    "https://static001.geekbang.org/resource/image/73/e4/730ea9c393def7975deceb48b3eb6fe4.jpg",
+];
 
-    if (typeof Tag === 'string') {
-        o = new Wrapper(Tag);
-    } else {
-        o = new Tag({
-            timer: {}
-        });
-    }
-
-    for (let name in attributes) {
-        o.setAttribute(name, attributes[name]);
-    }
-
-    for (let child of children) {
-        if (typeof child === 'string') {
-            child = new Text(child);
-        }
-        o.appendChild(child);
-    }
-
-    return o;
-}
-
-class Text {
-    constructor(text) {
-        this.root = document.createTextNode(text);
-    }
-    mountTo(parent) {
-        parent.appendChild(this.root);
-    }
-}
-
-class Wrapper {
-    constructor(tag) {
-        this.children = [];
-        console.log('create', tag);
-        this.root = document.createElement(tag);
-    }
-
-    setAttribute(name, value) {
-        this.root.setAttribute(name, value);
-    }
-
-    appendChild(child) {
-        this.children.push(child);
-    }
-
-    mountTo(parent) {
-        parent.appendChild(this.root)
-        for (let child of this.children) {
-            child.mountTo(this.root);
-        }
-    }
-}
-
-class MyComponent {
+class Carousel {
     constructor(config) {
         this.children = [];
         this.attrs = [];
     }
 
     setAttribute(name, value) {
-        this.attrs.push({ name, value });
-    }
-
-    appendChild(child) {
-        this.children.push(child);
+        this[name] = value;
     }
 
     render() {
-        return <article>
-            <header>I'm a header</header>
-            {this.slot}
-            <footer>I'm a footer</footer>
-        </article>
+        return (
+          <div class="carousel">
+              {this.data.map(url => {
+                  let element = <img src={url} />;
+                  element.addEventListener('dragstart', e => e.preventDefault());
+                  return element;
+              })}
+          </div>
+        )
     }
 
     mountTo(parent) {
-        this.slot = <div></div>
-        for (let child of this.children) {
-            console.log(child, 'mount', this.slot);
-            this.slot.appendChild(child);
-        }
         this.render().mountTo(parent);
     }
 }
 
 
 let component = (
-    <MyComponent class="parent">
-        <div className="1">1111</div>
-        <p className="2">hello world</p>
-        <div className="3">333</div>
-    </MyComponent>
+  <Carousel data={data} />
 )
 
 
