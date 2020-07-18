@@ -1,0 +1,64 @@
+<style>
+   div {
+       width: 100px;
+       height: 100px;
+       background-color: cadetblue;
+   } 
+   div#el2 {
+       width: 100px;
+       height: 100px;
+       background-color: cadetblue;
+       transition: 5s ease;
+   } 
+</style>
+
+<button id="pp">pause</button>
+<button id="rr">resume</button>
+<div id="el"></div>
+<div id="el2"></div>
+
+<script type="module">
+    import {Timeline, Animation, ColorAnimation} from './animation.js';
+    import {cubicBezier} from './cubicBezier.js';
+
+    let el = document.getElementById('el');
+    let tl = new Timeline;
+
+    let ease = cubicBezier(.25, .1, .25, .1);
+
+    tl.add(new Animation(
+        el.style, 
+        "transform", 
+        v => `translateX(${v}px)`, 
+        0, 
+        200, 
+        5000,
+        0,
+        ease
+    ));
+    setTimeout(() => {
+        tl.add(new ColorAnimation(
+            el.style, 
+            "backgroundColor", 
+            undefined,
+            {r:0,g:0,b:0,a:1}, 
+            {r:0,g:255,b:255,a:1}, 
+            5000,
+            0,
+            ease
+        ), 2000);
+    }, 0);
+
+    tl.start();
+
+    setTimeout(() => {
+        document.getElementById('el2').style.transform = "translateX(200px)"
+    }, 0);
+
+    document.getElementById('pp').addEventListener('click', () => {
+        tl.pause();
+    })
+    document.getElementById('rr').addEventListener('click', () => {
+        tl.resume();
+    })
+</script>
