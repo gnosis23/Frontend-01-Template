@@ -1,13 +1,18 @@
 
 let element = document.body;
 
+let contexts = Object.create(null);
+
+let MOUSE_SYMBOL = Symbol("mouse");
+
 element.addEventListener('mousedown', (event) => {
-  start(event);
+  contexts[MOUSE_SYMBOL] = Object.create(null);
+  start(event, contexts[MOUSE_SYMBOL]);
   let mousemove = event => {
-    move(event);
+    move(event, contexts[MOUSE_SYMBOL]);
   };
   let mouseend = event => {
-    end(event);
+    end(event, contexts[MOUSE_SYMBOL]);
     document.removeEventListener('mousemove', mousemove);
     document.removeEventListener('mouseup', mouseend);
   };
@@ -17,25 +22,29 @@ element.addEventListener('mousedown', (event) => {
 
 element.addEventListener('touchstart', event => {
   for (let touch of event.changedTouches) {
-    start(touch);
+    contexts[touch.identifier] = Object.create(null);
+    start(touch, contexts[touch.identifier]);
   }
 });
 
 element.addEventListener('touchmove', event => {
   for (let touch of event.changedTouches) {
-    move(touch);
+    move(touch, contexts[touch.identifier]);
   }
 });
 
 element.addEventListener('touchend', event => {
   for (let touch of event.changedTouches) {
-    end(touch);
+    end(touch, contexts[touch.identifier]);
+    delete contexts[touch.identifier];
   }
+
 });
 
 element.addEventListener('touchcancel', event => {
   for (let touch of event.changedTouches) {
-    cancel(touch);
+    cancel(touch, touch.identifier);
+    delete contexts[touch.identifier];
   }
 });
 
@@ -45,18 +54,51 @@ element.addEventListener('touchcancel', event => {
 // flick
 // press - pressstart pressend
 
-let start = (point) => {
-  console.log('start', point.clientX, point.clientY);
+let start = (point, context) => {
+  context.startX = point.clientX;
+  context.startY = point.clientY;
+  context.isTap = true;
+  context.isPan = false;
+  context.isPress = false;
+  context.timeoutHandler = setTimeout(() => {
+    if (context.isPan)
+      return;
+
+    context.isTap = false;
+    context.isPan = false;
+    context.isPress = true;
+    console.log('pressstart');
+  }, 500);
 };
 
-let move = (point) => {
-  console.log('move', point.clientX, point.clientY);
+let move = (point, context) => {
+  let dx = point.clientX - context.startX, dy = point.clientY - context.startY;
+
+  if (dx ** 2 + dy ** 2 > 100 && !context.isPan) {
+    context.isTap = false;
+    context.isPan = true;
+    context.isPress = false;
+    console.log('panstart');
+  }
+
+  if (context.isPan)
+    console.log('pan');
+
+  // console.log('move', dx, dy);
 };
 
-let end = (point) => {
-  console.log('end', point.clientX, point.clientY);
+let end = (point, context) => {
+  if (context.isPan)
+    console.log('panend');
+  if (context.isTap)
+    console.log('tapend');
+  if (context.isPress)
+    console.log('pressend');
+
+  clearTimeout(context.timeoutHandler);
 };
 
-let cancel = (point) => {
-  console.log('cancel', point.clientX, point.clientY);
+let cancel = (point, context) => {
+  console.log('canceled');
+  clearTimeout(context.timeoutHandler);
 };
