@@ -14,6 +14,26 @@
   </style>
 </head>
 <body>
+  <div id="my" style="transform:translate(0px, 0px);width:100px;height:100px;background:lightgreen;"></div>
   <script src="./gesture.js"></script>
+  <script>
+
+    let x = 0, y = 0;
+
+    let my = document.getElementById('my');
+
+    enableGesture(my);
+
+    my.addEventListener('pan', event => {
+      const d = event;
+      my.style.transform = `translate(${x + d.clientX - d.startX}px,${y + d.clientY - d.startY}px)`;
+    });
+
+    my.addEventListener('panend', event => {
+      const d = event;
+      x = x + d.clientX - d.startX;
+      y = y + d.clientY - d.startY;
+    })
+  </script>
 </body>
 </html>
