@@ -63,7 +63,7 @@ export class Timeline {
     this.tick();
   }
 
-  restart() {
+  reset() {
     if (this.state === 'playing') {
       this.pause();
     }
