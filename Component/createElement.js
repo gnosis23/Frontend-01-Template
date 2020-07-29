@@ -59,6 +59,10 @@ export class Wrapper {
     this.root.addEventListener(...arguments);
   }
 
+  get style() {
+    return this.root.style;
+  }
+
   mountTo(parent) {
     parent.appendChild(this.root)
     for (let child of this.children) {

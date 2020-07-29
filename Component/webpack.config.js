@@ -1,4 +1,5 @@
 const webpack = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
 
 module.exports = {
@@ -15,13 +16,13 @@ module.exports = {
             plugins: [['@babel/plugin-transform-react-jsx', { pragma: 'h' }]]
           }
         }
-      },
-      {
-        test: /\.view/,
-        use: {
-          loader: require.resolve('./myloader.js')
-        }
       }
+      // {
+      //   test: /\.view/,
+      //   use: {
+      //     loader: require.resolve('./myloader.js')
+      //   }
+      // }
     ]
   },
   optimization: {
@@ -31,5 +32,10 @@ module.exports = {
     contentBase: path.join(__dirname, 'dist'),
     compress: true,
     port: 9000
-  }
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: 'index.html'
+    })
+  ]
 }
