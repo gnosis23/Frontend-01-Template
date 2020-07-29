@@ -7,6 +7,7 @@
 ├── src
 │   ├── animation.js
 │   ├── carousel.view
+│   ├── Carousel.js
 │   ├── createElement.js
 │   ├── gesture.js
 │   ├── index.html

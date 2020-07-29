@@ -18,6 +18,9 @@ export class Timeline {
           addTime
         } = animation;
 
+        if (passedTime < delay + addTime)
+          continue;
+
         let progression = timingFunction((passedTime - delay - addTime) / duration) // 0-1之间
 
         if (passedTime > duration + delay + addTime) {
