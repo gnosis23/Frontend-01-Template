@@ -1,4 +1,6 @@
 import { h, Text, Wrapper } from './createElement';
+import { Timeline, Animation } from './animation';
+import { ease } from './cubicBezier';
 
 let data = [
   "https://static001.geekbang.org/resource/image/bb/21/bb38fb7c1073eaee1755f81131f11d21.jpg",
@@ -32,31 +34,40 @@ class Carousel {
 
     let position = 0;
 
+    let timeline = new Timeline();
+
     let nextPic = () => {
       let nextPosition = (position + 1) % this.data.length;
 
       let current = children[position];
       let next = children[nextPosition];
 
-      current.style.transition = 'ease 0s';
-      next.style.transition = 'ease 0s';
+      let currentAnimation = new Animation(
+        current.style,
+        'transform',
+        -100 * position,
+        -100 - 100 * position,
+        500,
+        0,
+        ease,
+        v => `translateX(${v}%)`
+      );
+      let nextAnimation = new Animation(
+        next.style,
+        'transform',
+        100 -100 * nextPosition,
+        - 100 * nextPosition,
+        500,
+        0,
+        ease,
+        v => `translateX(${v}%)`
+      );
+      timeline.add(currentAnimation);
+      timeline.add(nextAnimation);
 
-      current.style.transform = `translateX(${- 100 * position}%)`;
-      next.style.transform = `translateX(${100 - 100 * nextPosition}%)`;
+      timeline.start();
 
-      // requestAnimationFrame(() => {
-      //   requestAnimationFrame(() => {})
-      // })
-
-      setTimeout(() => {
-        current.style.transition = 'ease 0.5s';
-        next.style.transition = 'ease 0.5s';
-
-        current.style.transform = `translateX(${-100 - 100 * position}%)`;
-        next.style.transform = `translateX(${-100 * nextPosition}%)`;
-
-        position = nextPosition;
-      }, 16);
+      position = nextPosition;
 
       setTimeout(nextPic, 3000);
     };
