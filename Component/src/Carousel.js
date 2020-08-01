@@ -57,9 +57,11 @@ export default class Carousel {
         let direction = 0;
         let dx = event.clientX - event.startX;
 
+        console.log('flick', event.isFlick)
+
         if (dx + offset > 250) {
           direction = 1;
-        } else if (dx + offset0 < -250) {
+        } else if (dx + offset < -250) {
           direction = -1;
         }
 
