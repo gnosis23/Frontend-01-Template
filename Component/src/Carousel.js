@@ -12,6 +12,10 @@ export default class Carousel {
     this[name] = value;
   }
 
+  appendChild(child) {
+    this.children.push(child);
+  }
+
   render() {
     let position = 0;
 
@@ -57,11 +61,11 @@ export default class Carousel {
         let direction = 0;
         let dx = event.clientX - event.startX;
 
-        console.log('flick', event.isFlick)
+        console.log('flick', event.isFlick);
 
-        if (dx + offset > 250) {
+        if (dx + offset > 250 || dx > 0 && event.isFlick) {
           direction = 1;
-        } else if (dx + offset < -250) {
+        } else if (dx + offset < -250 || dx < 0 && event.isFlick) {
           direction = -1;
         }
 
