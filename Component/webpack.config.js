@@ -8,13 +8,19 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.jsx?/,
+        test: /\.jsx?$/,
         use: {
           loader: 'babel-loader',
           options: {
             presets: ['@babel/preset-env'],
             plugins: [['@babel/plugin-transform-react-jsx', { pragma: 'h' }]]
           }
+        }
+      },
+      {
+        test: /\.css$/,
+        use: {
+          loader: require.resolve('./src/custom-css-loader.js')
         }
       }
       // {

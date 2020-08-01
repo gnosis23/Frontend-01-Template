@@ -1,6 +1,7 @@
 import { h, Text, Wrapper } from './createElement';
 import {Animation, Timeline} from "./animation";
 import {ease} from "./cubicBezier";
+import './carousel.css';
 
 export default class Carousel {
   constructor(config) {
