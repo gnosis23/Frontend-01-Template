@@ -1,7 +1,7 @@
-
-// FIXME: getChar实现很傻
-// https://stackoverflow.com/questions/5006821/nodejs-how-to-read-keystrokes-from-stdin
 const { stdout } = require("ttys");
+const cursor = require('./cursor');
+
+// https://stackoverflow.com/questions/5006821/nodejs-how-to-read-keystrokes-from-stdin
 var stdin = process.stdin;
 stdin.setRawMode(true);
 stdin.resume();
@@ -13,25 +13,7 @@ function getChar() {
   });
 }
 
-// 命令行光标移动
-// https://stackoverflow.com/questions/10585683/how-do-you-edit-existing-text-and-move-the-cursor-around-in-the-terminal/10830168
-function up(n = 1) {
-  stdout.write('\033[' + n + 'A');
-}
-
-function down(n = 1) {
-  stdout.write('\033[' + n + 'B');
-}
-
-function right(n = 1) {
-  stdout.write('\033[' + n + 'C');
-}
-
-function left(n = 1) {
-  stdout.write('\033[' + n + 'D');
-}
-
-async function select(choices) {
+module.exports = async function select(choices) {
   let selected = 0;
   for (let i = 0;  i < choices.length; i++) {
     let choice = choices[i];
@@ -41,8 +23,8 @@ async function select(choices) {
       stdout.write('[ ] ' + choice + '\n');
     }
   }
-  up(choices.length);
-  right();
+  cursor.up(stdout, choices.length);
+  cursor.right(stdout);
   while(true) {
     let char = await getChar();
     if (char === '\u0003') {
@@ -51,31 +33,24 @@ async function select(choices) {
     }
     if (char === 'w' && selected > 0) {
       stdout.write(' ');
-      left();
+      cursor.left(stdout);
       selected--;
-      up();
+      cursor.up(stdout);
       stdout.write('x')
-      left();
+      cursor.left(stdout);
     }
     if (char === 's' && selected < choices.length - 1) {
       stdout.write(' ');
-      left();
+      cursor.left(stdout);
       selected++;
-      down();
+      cursor.down(stdout);
       stdout.write('x');
-      left();
+      cursor.left(stdout);
     }
     if (char === '\r') {
-      down(choices.length - selected);
-      left();
+      cursor.down(stdout, choices.length - selected);
+      cursor.left(stdout);
       return choices[selected];
     }
   }
 }
-
-void async function () {
-  stdout.write('which framework do you want to use?\n');
-  const selected = await select(["vue", "react", "angular"]);
-  stdout.write('You selected ' + selected + '\n');
-  process.exit();
-}();
