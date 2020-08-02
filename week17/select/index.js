@@ -1,56 +1,76 @@
-const { stdout } = require("ttys");
+const readline = require('readline');
+const MuteStream = require('mute-stream');
+const chalk = require('chalk');
 const cursor = require('./cursor');
 
 // https://stackoverflow.com/questions/5006821/nodejs-how-to-read-keystrokes-from-stdin
-var stdin = process.stdin;
-stdin.setRawMode(true);
-stdin.resume();
-stdin.setEncoding('utf8');
 
-function getChar() {
-  return new Promise(resolve => {
-    stdin.once('data', key => resolve(key));
-  });
+let renderId = 0;
+function render(rl, choices, selected, nextSelected) {
+  // clear
+  if (renderId !== 0) {
+    cursor.down(rl.output, choices.length - selected);
+    cursor.clearLine(rl.output, choices.length + 1);
+  }
+  renderId++;
+
+  // rerender
+  for (let i = 0;  i < choices.length; i++) {
+    let choice = choices[i];
+    if (i === nextSelected) {
+      rl.output.write(chalk.blue(`[x] ${choice}\n`));
+    } else {
+      rl.output.write('[ ] ' + choice + '\n');
+    }
+  }
+
+  // move cursor
+  cursor.up(rl.output, choices.length - nextSelected);
+  cursor.right(rl.output, 1);
 }
 
 module.exports = async function select(choices) {
+  const output = new MuteStream();
+  output.pipe(process.stdout);
+
+  const rl = readline.createInterface({
+    terminal: true,
+    input: process.stdin,
+    output
+  });
+
   let selected = 0;
-  for (let i = 0;  i < choices.length; i++) {
-    let choice = choices[i];
-    if (i === selected) {
-      stdout.write('[x] ' + choice + '\n');
-    } else {
-      stdout.write('[ ] ' + choice + '\n');
-    }
-  }
-  cursor.up(stdout, choices.length);
-  cursor.right(stdout);
-  while(true) {
-    let char = await getChar();
-    if (char === '\u0003') {
-      process.exit();
-      break;
-    }
+
+  render(rl, choices, selected, selected);
+
+  const keyHandler = (char) => {
     if (char === 'w' && selected > 0) {
-      stdout.write(' ');
-      cursor.left(stdout);
+      render(rl, choices, selected, selected - 1);
       selected--;
-      cursor.up(stdout);
-      stdout.write('x')
-      cursor.left(stdout);
     }
     if (char === 's' && selected < choices.length - 1) {
-      stdout.write(' ');
-      cursor.left(stdout);
+      render(rl, choices, selected, selected + 1);
       selected++;
-      cursor.down(stdout);
-      stdout.write('x');
-      cursor.left(stdout);
     }
     if (char === '\r') {
-      cursor.down(stdout, choices.length - selected);
-      cursor.left(stdout);
-      return choices[selected];
+      cursor.down(rl.output, choices.length - selected);
+      cursor.left(rl.output);
     }
-  }
+  };
+
+  rl.output.mute();
+  return new Promise(resolve => {
+    let handler = (c, k) => {
+      rl.output.unmute();
+      keyHandler(c);
+      rl.output.mute();
+
+      if (c === '\r') {
+        rl.input.removeListener('keypress', handler);
+        rl.output.unmute();
+        resolve(choices[selected]);
+      }
+    };
+    rl.input.on('keypress', handler);
+  });
 }

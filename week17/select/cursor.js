@@ -18,9 +18,14 @@ function left(output, n = 1) {
   output.write(ansiEscape.cursorBackward(n));
 }
 
+function clearLine(output, n) {
+  output.write(ansiEscape.eraseLines(n));
+}
+
 module.exports = {
   up,
   down,
   left,
-  right
+  right,
+  clearLine
 }
