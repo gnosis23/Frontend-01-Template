@@ -18,5 +18,10 @@ module.exports = function(source, map) {
   let style = document.createElement("style");
   style.innerHTML = ${JSON.stringify(css.stringify(styleSheet))};
   document.head.appendChild(style);
+  
+  if (module.hot) {
+    module.hot.accept();
+    module.hot.dispose(() => { style.parentNode.removeChild(style); })
+  }
   `;
 }
