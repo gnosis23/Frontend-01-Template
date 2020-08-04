@@ -1,0 +1,16 @@
+{
+  "name": "generator-chicken",
+  "version": "0.1.0",
+  "description": "",
+  "files": [
+    "app",
+    "router",
+    "app/templates"
+  ],
+  "keywords": [
+    "yeoman-generator"
+  ],
+  "dependencies": {
+    "yeoman-generator": "^1.0.0"
+  }
+}
