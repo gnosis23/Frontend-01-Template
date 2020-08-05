@@ -22,10 +22,25 @@ function clearLine(output, n) {
   output.write(ansiEscape.eraseLines(n));
 }
 
+function to(output, x, y) {
+  output.write(ansiEscape.cursorMove(x, y));
+}
+
+function savePosition(output) {
+  output.write(ansiEscape.cursorSavePosition);
+}
+
+function restorePosition(output) {
+  output.write(ansiEscape.cursorRestorePosition);
+}
+
 module.exports = {
   up,
   down,
   left,
   right,
-  clearLine
+  clearLine,
+  to,
+  savePosition,
+  restorePosition
 }
