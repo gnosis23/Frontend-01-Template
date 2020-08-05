@@ -6,11 +6,14 @@ const cursor = require('./cursor');
 // https://stackoverflow.com/questions/5006821/nodejs-how-to-read-keystrokes-from-stdin
 
 let renderId = 0;
-function render(rl, choices, selected, nextSelected) {
+function render(rl, choices, nextSelected) {
+
   // clear
   if (renderId !== 0) {
-    cursor.down(rl.output, choices.length - selected);
+    cursor.to(rl.output, 0, choices.length);
     cursor.clearLine(rl.output, choices.length + 1);
+  } else {
+    cursor.savePosition(rl.output);
   }
   renderId++;
 
@@ -25,8 +28,8 @@ function render(rl, choices, selected, nextSelected) {
   }
 
   // move cursor
-  cursor.up(rl.output, choices.length - nextSelected);
-  cursor.right(rl.output, 1);
+  cursor.restorePosition(rl.output);
+  cursor.to(rl.output, 1, nextSelected);
 }
 
 module.exports = async function select(choices) {
@@ -41,15 +44,15 @@ module.exports = async function select(choices) {
 
   let selected = 0;
 
-  render(rl, choices, selected, selected);
+  render(rl, choices, selected);
 
   const keyHandler = (char) => {
     if (char === 'w' && selected > 0) {
-      render(rl, choices, selected, selected - 1);
+      render(rl, choices, selected - 1);
       selected--;
     }
     if (char === 's' && selected < choices.length - 1) {
-      render(rl, choices, selected, selected + 1);
+      render(rl, choices, selected + 1);
       selected++;
     }
     if (char === '\r') {
