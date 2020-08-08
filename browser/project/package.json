@@ -14,7 +14,8 @@
   "scripts": {
     "start-client": "node client.js",
     "start-server": "node server.js",
-    "test": "mocha"
+    "test": "mocha",
+    "coverage": "nyc mocha"
   },
   "keywords": [],
   "author": "",

@@ -5,7 +5,7 @@ let currentToken = null
 let currentAttribute = null
 let currentTextNode = null
 
-let stack = [{type: 'document', children: []}]
+let stack;
 
 function emit(token) {
   let top = stack[stack.length - 1]
@@ -117,11 +117,11 @@ function endTagOpen(c) {
     }
     return tagName(c)
   } else if (c === '>') {
-
+    throw new Error('missing-end-tag-name');
   } else if (c === EOF) {
-
+    throw new Error('eof-before-tag-name');
   } else {
-
+    throw new Error('invalid-first-character-of-tag-name');
   }
 }
 
@@ -175,17 +175,19 @@ function attributeName(c) {
 
 function afterAttributeName(c) {
   if (c.match(/^[\t\n\f ]$/)) {
-    afterAttributeName
+    return afterAttributeName
   } else if (c === '/') {
     return selfClosingStartTag
   } else if (c === '=') {
     return beforeAttributeValue
   } else if (c === '>') {
+    currentToken[currentAttribute.name] = true;
     emit(currentToken)
     return data
   } else if (c === EOF) {
-
+    throw new Error('eof-in-tag');
   } else {
+    currentToken[currentAttribute.name] = true;
     currentAttribute = {
       name: '',
       value: ''
@@ -199,7 +201,7 @@ function beforeAttributeValue(c) {
     return beforeAttributeValue
   } else if (c === "\"") {
     return doubleQuotedAttributeValue
-  } else if (c === "\'") {
+  } else if (c === "'") {
     return singleQuotedAttributeValue
   } else if (c === '>') {
 
@@ -230,7 +232,7 @@ function singleQuotedAttributeValue(c) {
 
   } else {
     currentAttribute.value += c
-    return doubleQuotedAttributeValue
+    return singleQuotedAttributeValue
   }
 }
 
@@ -278,14 +280,15 @@ function selfClosingStartTag(c) {
     currentToken.isSelfClosing = true
     emit(currentToken)
     return data
-  } else if (c === "EOF") {
-
+  } else if (c === EOF) {
+    throw new Error('eof-in-tag');
   } else {
-
+    throw new Error('unexpected-solidus-in-tag')
   }
 }
 
 module.exports.parseHTML = function (html) {
+  stack = [{type: 'document', children: []}]
   let state = data
   for(let c of html) {
     state = state(c)
