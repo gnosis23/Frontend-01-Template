@@ -1,0 +1,15 @@
+{
+  "name": "<%= title %>",
+  "version": "0.1.0",
+  "description": "",
+  "keywords": [],
+  "scripts": {
+    "test": "mocha",
+    "coverage": "nyc mocha",
+    "start": "webpack-dev-server",
+    "webpack": "webpack"
+  },
+  "dependencies": {},
+  "author": "wbh",
+  "license": "MIT"
+}

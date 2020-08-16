@@ -1,0 +1,20 @@
+<template>
+    <div>
+        <img />
+    </div>
+</template>
+<script>
+export default {
+    el: '#example',
+    data: {
+        message: 'Hello'
+    },
+    computed: {
+        reversedMessage: function() {
+            for (let i = 0; i < 10; i++) {
+                console.log(i > 10);
+            }
+        }
+    }
+}
+</script>
