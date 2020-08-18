@@ -1,15 +1,12 @@
 {
-  "name": "publish-tool",
+  "name": "publish-server-vanilla",
   "version": "1.0.0",
   "description": "",
-  "main": "publish.js",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "archiver": "^5.0.0"
-  }
+  "license": "ISC"
 }
